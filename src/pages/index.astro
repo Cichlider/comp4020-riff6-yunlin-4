@@ -5,42 +5,51 @@ import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
 import heroImage from "../assets/images/hero-home.avif";
 import { courseMeta } from "../course-config";
 import { sessionLabels, siteConfig } from "../site-config";
-
-// STARTER_CONTENT: replace the hero artwork and its alt text below, then
-// remove this comment.
 ---
 
 <ContentLayout
   title={`${courseMeta.code}: ${courseMeta.title}`}
   description={courseMeta.description}
   heroImage={heroImage}
-  heroImageAlt="A lecture theatre reduced to flat gold and black shapes, rows of seats sweeping past the frame, in a two-ink risograph print"
+  heroImageAlt="A single gold brushstroke tapers to a point partway across a cream field; a thin grey dashed line continues where the stroke does not."
   {...siteConfig}
 >
   <ul class="course-tags" aria-label="Course tags">
     {courseMeta.tags.map((tag) => <li>{tag}</li>)}
   </ul>
 
-  <!-- STARTER_CONTENT: replace the authored page below, then remove this comment. -->
   <h2>What you will do</h2>
   <p>
-    Say what a student spends their time on — the making, reading, arguing or
-    measuring that fills the weeks. Name the artefact they walk out with.
+    Every week takes one discipline's way of leaving something out — a blank
+    patch of silk, an unplayed beat, an argument that never states its
+    conclusion — and asks what the omission was doing. You will read primary
+    sources and make things: an ink wash with the brush lifted early, a scene
+    cut two beats before the reveal, a proof that stops the instant it has
+    enough. The seminar argues about whether each cut earned its keep. The
+    three assessments ask you to keep a record of cuts you notice in the wild,
+    make one deliberately in a medium of your choosing, and finally build an
+    argument whose force depends on what you refuse to say.
   </p>
 
   <h2>Who it is for</h2>
   <p>
-    Say who this is aimed at and what they need to already know. Be specific
-    enough that someone can rule themselves in or out without emailing you.
+    Built for a student who has already made something — a painting, a piece
+    of writing, a design, a proof, a score — and is ready to be told that half
+    of it should go. No single prerequisite discipline: what you need on day
+    one is a portfolio of at least one finished thing, and the willingness to
+    defend, out loud, why a particular part of it stays.
   </p>
 
   <h2>Where to go next</h2>
   <CardGrid columns={2}>
     <Card title={sessionLabels.plural} href="/sessions/">
-      <p>The weekly schedule and what happens in each teaching session.</p>
+      <p>The weekly discussion: what to bring, and what gets argued over.</p>
     </Card>
     <Card title="Assessment" href="/assessments/">
       <p>What is marked, what it is worth, and when it is due.</p>
+    </Card>
+    <Card title="Lectures" href="/lectures/">
+      <p>The twelve cases the course moves through, week by week.</p>
     </Card>
     <Card title="People" href="/people/">
       <p>Who teaches the course and how to reach them.</p>
