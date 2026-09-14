@@ -1,53 +1,69 @@
 # Process overview
 
-<!-- TEMPLATE: this file is a shape to fill in, not a form. Replace everything
-     in it with your own overview, and delete this comment — `pnpm
-     check:evidence` will remind you if it's still here. -->
-
-Written by you, for a reader: how you got from the brief to the harness and
-agentic workflow behind this submission. Markers read this file and follow its
-citations; they don't trawl the repo for evidence you didn't point at.
-
-This file is the shape; the course site's
-[assessment page](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/assessment/#what-you-submit)
-is the requirement, and its
-[word counts](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/assessment/#word-counts)
-cover every deliverable.
-
 ## What I built
 
-One paragraph: the thing, and the idea behind it.
+SLOP3268, *Via Negativa: Practices of Subtraction* --- a twelve-week studio
+that takes one discipline's version of "leaving something out" per week
+(apophatic theology, literati ink painting, musical silence, minimalist
+fiction, film editing, architecture, graphic design, null results,
+mathematics, political omission) and closes on a week that turns the
+course's own thesis on itself. The idea behind it: restraint isn't a
+single trick, it's a family of moves that different fields have each
+independently formalised, and a student who's seen six versions of it
+should start noticing the seventh unprompted.
 
 ## How I got here
 
-The account of the process: how the work actually went, and how you knew the
-result was right. Tell it in whatever order makes it clear. A weekly prototype
-needs a paragraph or two; an assignment needs more.
+I started from the fetched brief's spec --- a real twelve-week syllabus,
+one lecture with a real deck, assessment weights summing to 100%, and
+custom `spec/` checks protecting my own promises --- and picked the
+subject before touching any code, since the redesign lesson I already
+carry from other work is that the subject choice is itself where the
+argument lives, not a precondition to it
+([`93d3adc`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/93d3adc)).
+I chose subtraction-across-disciplines specifically because it let me
+extend an existing aesthetic interest of mine (Ni Zan's "taste is what
+you leave out") into course *content* rather than visual style, since
+this template's branding is fixed and the usual "open look" move wasn't
+available here.
 
-Cite the record as you go, as links whose text is the commit hash or range and
-whose target is this repo's commit or compare URL, so a reader clicks straight
-to the evidence:
+Content came in dependency order: the course record and renamed
+`sessions → seminars` label first
+([`93d3adc`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/93d3adc)),
+then the homepage and brand artwork
+([`ab3721d`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/ab3721d)),
+then the two teaching staff
+([`b8e862e`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/b8e862e))
+so lectures and sessions had someone to reference. The twelve lectures
+([`1e50df9`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/1e50df9))
+and six seminars
+([`71e3e96`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/71e3e96))
+came together, cross-linked with `related:`. The three assessments
+(20/35/45%) came with a custom check
+([`9c2ac20`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/9c2ac20))
+--- I wrote `spec/assessment-weights.test.ts` because the schema's own
+weighted-marking validator only checks one assessment's *internal*
+criteria sum to 100, never the course-wide total across all three, which
+is exactly the promise the brief actually asks a course to keep.
 
-- one commit: [`a1b2c3d`](https://github.com/YOUR-ORG/YOUR-REPO/commit/a1b2c3d)
-- a range:
-  [`a1b2c3d...e4f5a6b`](https://github.com/YOUR-ORG/YOUR-REPO/compare/a1b2c3d...e4f5a6b)
+Two build failures were worth noting: the assessment frontmatter tripped
+the YAML parser twice, both times because a multi-line plain scalar
+contained a bare `word: word` pattern that YAML read as an implicit
+nested mapping key rather than prose (a colon inside "counter-case:" and
+inside "not on volume:"). Both were fixed by rewording rather than
+quoting, since the em-dash convention I already use elsewhere reads
+better than an escaped colon would have.
 
-To pair a prompt with the commit it produced, quote the prompt (curated, not a
-full transcript) next to the citation:
-
-> the prompt, verbatim
-
-Screenshots are welcome where one carries the point better than a sentence does.
-Commit the file to this repo and link it with a **relative** path, which is what
-makes it render on GitHub: `![alt text](docs/before.png)`. Images don't count
-towards the word count and don't replace the citation.
+Before treating any of it as done I ran `pnpm check` (typecheck, build,
+axe accessibility, link/deck validation, and the vitest suite including
+my own weight-sum test) clean, then walked the built `pnpm preview` site
+with `agent-browser` at both desktop and the 390px mobile marking
+viewport --- homepage, a lecture with its deck, an assessment, a person
+page, and the mobile nav menu --- with a clean console throughout, before
+stopping the preview server.
 
 ## Before you ship
 
-`pnpm check:evidence` verifies that this comment is gone, that your citations
-resolve to real commits, that a crit week's reflection entry is in
-`reflections/`, and that your `CLAUDE.md` is there. It checks that your account
-is traceable, not that it is good: that is the marker's call.
-
-Images aren't checked: unlike a citation whose SHA doesn't resolve, a broken
-image is visible the moment this file is rendered on GitHub.
+This run is a mid-build checkpoint, not the final submission: the repo
+stays private and unshipped, per this course's own doctrine that
+publishing is a later, separate step.
