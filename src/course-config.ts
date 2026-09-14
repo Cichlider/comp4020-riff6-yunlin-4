@@ -40,23 +40,23 @@ export const slopCourseMetaSchema = z
 
 // The single source of truth for the course record. The generated homepage,
 // navigation label and /api/index.json all read this object.
-// Replace every placeholder value, but keep the shape: the catalogue ingests
-// this API contract when the course is published.
 //
 // The code's last three digits were assigned to this repo when it was
-// provisioned, and no other course in the cohort has them. Change the first
-// digit to your course's level (and `level` to match); keep the other three.
-// STARTER_CONTENT: replace this course record, then remove this comment.
+// provisioned, and no other course in the cohort has them, so they stay.
+// 3xxx puts Via Negativa where an advanced, discipline-spanning elective
+// belongs on the usual ANU scheme: not an intro course, not a research one.
 export const courseMeta = slopCourseMetaSchema.parse({
-  code: "SLOP1268",
-  title: "Course Title Goes Here",
+  code: "SLOP3268",
+  title: "Via Negativa: Practices of Subtraction",
   session: "Semester 1",
   year: 2027,
-  level: 1,
+  level: 3,
   startDate: "2027-02-22",
   endDate: "2027-05-28",
   description:
-    "One concise paragraph explaining what this course is, who it is for, " +
-    "and why somebody would choose to spend a semester taking it.",
-  tags: ["replace me"],
+    "A studio in what disciplines gain by leaving something out: twelve weeks " +
+    "moving from apophatic theology and literati ink painting to film editing, " +
+    "minimalist design and the null hypothesis, each week asking what the cut " +
+    "was for. Practice-based, discussion-heavy, and suspicious of its own restraint.",
+  tags: ["subtraction", "cross-disciplinary", "studio practice"],
 }) satisfies CourseMetaInput;
