@@ -1,17 +1,20 @@
 ---
 title: Idris Fenn
 description:
-  A tutor working across the course's first reviews and the practical work that
-  follows them.
+  A tutor and working film editor who runs the seminar's practice weeks and
+  marks the two studio-based assessments.
 affiliation: Slop University School of Invented Disciplines
 role: tutor
 email: idris.fenn@slop.university
-contact: Ask during sessions, or email when a question cannot wait until the next one.
-photo: ./idris-fenn.avif
-photoAlt: A stylised portrait of a person facing the viewer, flat gold and black shapes on warm cream, in a two-ink risograph print
+contact: Ask during the seminar, or email when a question can't wait until the next one.
 ---
 
-<!-- STARTER_CONTENT: replace this person entry, then remove this comment. -->
+Idris cuts documentaries for a living, which means spending most of a working
+week deciding what a film doesn't need. He joined Via Negativa to argue the
+case that editing is the discipline's most literal example --- a cut is a
+material fact, timestamped, and you can always point to the frame where it
+happened, which most of the course's other examples can't quite offer.
 
-Replace this entry. A second person makes the listing, role ordering and
-teacher-reference fields visible before you replace the cast with your own.
+He marks the studio-based assessments and holds the view, stated early and
+often, that a good cut should be uncomfortable to make and only slightly
+less uncomfortable to defend.
