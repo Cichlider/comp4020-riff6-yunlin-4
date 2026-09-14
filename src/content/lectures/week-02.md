@@ -1,23 +1,32 @@
 ---
-title: Second lecture
+title: The apophatic turn
 description:
-  Week 2 — the first substantive material, and the run-up to the first review
+  Pseudo-Dionysius, Maimonides and the Cloud of Unknowing --- a tradition
+  that got more precise about God by refusing every positive sentence about
+  him
 week: 2
 date: 2027-03-01
 teachers:
-  - idris-fenn
-related:
-  - sessions/02-first-review
-  - assessments/assignment-1
+  - marisol-quaye
 ---
 
-<!-- STARTER_CONTENT: replace this lecture, then remove this comment. -->
+Pseudo-Dionysius's move, formalised: God is not good, not wise, not
+existent --- not because these are false, but because any word drawn from
+creation is too small for what it's describing, and saying so is more
+accurate than reaching for a bigger word. Maimonides ran the same
+argument through Aristotelian logic three centuries later and called it
+the only theology that doesn't eventually lie. The Cloud of Unknowing took
+it further still: not just unsayable, but unthinkable, approached by
+"a dart of longing love" rather than an idea at all.
 
-Replace this page. It exists so the lectures listing sorts by week and the
-related block has more than one edge to draw.
+The lecture isn't a detour into religious history --- it's the
+vocabulary the rest of the semester borrows. "Apophatic" (saying by
+unsaying) versus "cataphatic" (saying by saying) is the pair every later
+week's discipline turns out to have its own local version of.
 
 ## Outline
 
-- the first substantive material, and where it shows up in practice
-- what the first review is looking for
-- reading before next week
+- three apophatic theologians, three different reasons for the same move
+- why "unsayable" is not the same claim as "unimportant"
+- the vocabulary we're borrowing: apophatic / cataphatic, and where it
+  will resurface
