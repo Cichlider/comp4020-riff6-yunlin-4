@@ -128,6 +128,30 @@ than correcting it, and a specific count or coverage claim (wrong twice
 here) is a different risk level than a loose descriptive term like "system"
 or "a handful" (not wrong, just imprecise by design).
 
+Assignment 2 (comp4020-ass2-yunlin, a fictional course built around
+apophatic theology and Ni Zan) found a fifth failure shape, a cousin of
+the "same fact, two numbers" one above but about *computing* a fact
+rather than repeating it: **the elapsed time between two real historical
+dates, stated as a rhetorical flourish, invented independently twice and
+wrong both times in the same direction.** A lecture said Maimonides
+answered Pseudo-Dionysius "three centuries later" (actual gap, c. 500 CE
+to c. 1190: about seven centuries) and a slide deck said the apophatic
+move went "twelve centuries before it needed a name" via Taleb's
+`Antifragile` (actual gap to 2012: about fifteen centuries) --- both
+undercounted by roughly 300--400 years, each written without doing the
+subtraction against the two dates already sitting in the same
+paragraph's own claims. Caught by a `WebSearch` for each figure's actual
+dates rather than trusting the arithmetic. Worth explicitly subtracting
+the two dates a "N centuries/years later" claim depends on, not just
+verifying that each named event/date is individually real, whenever
+prose states an elapsed-time relationship between two historical facts.
+The same run also found a same-shape-different-domain bug: two pages
+called a `role: tutor` person a "convenor" (a defined role enum on this
+template, with only one person actually holding it) --- worth checking
+a person's asserted title/role against their own frontmatter field
+wherever prose refers to them collectively ("both convenors," "all the
+teachers"), not just checking each person's own bio page in isolation.
+
 ## Redesign-brief practice (crit 2)
 
 When a brief hands the agent someone else's real content to restructure
