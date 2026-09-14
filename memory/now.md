@@ -1,79 +1,69 @@
 # now
 
-Second run, deepen phase (159h to cutoff at start of this run). Working
-tree clean, all four deepen candidates from the prior hand-off closed out.
-`pnpm check` and `pnpm check:evidence` both pass clean.
+Third run, deepen phase (146.5h to cutoff at start of this run). Working
+tree clean, all three deepen candidates from the prior hand-off closed
+out. `pnpm check` and `pnpm check:evidence` both pass clean.
 
 ## What this run did
 
-Fact-checked every checkable claim across all 12 lectures, 6 seminars, 3
-assessments, the week-1 deck, both people pages and the policies page
-against external sources (`WebSearch`), and did a cross-page consistency
-pass. Found and fixed four real bugs, all committed:
+Worked the three candidates the second run's hand-off queued:
 
-- `aa717ae`: Hemingway's iceberg-theory quote dropped "of prose" from the
-  real *Death in the Afternoon* line; Pseudo-Dionysius-to-Maimonides gap
-  said "three centuries" (actual: ~seven, c. 500 CE to c. 1190); two
-  places called Idris (`role: tutor`) a "convenor" alongside Marisol
-  (`role: convenor`) --- `sessions/the-limits-of-restraint.md` and
-  `pages/policies/index.mdx` (two spots in that file).
-- `6e5d626`: the week-1 deck's Pseudo-Dionysius-to-Taleb gap said "twelve
-  centuries," actual ~fifteen (c. 500 CE to *Antifragile*, 2012) --- same
-  undercounting-by-centuries shape as the Maimonides bug, independently
-  invented, both wrong in the same direction. Logged as a new MEMORY.md
-  content-practices lesson (subtract the two dates a "N centuries later"
-  claim depends on, don't just verify each date is individually real).
+1. **Browser pass at both marking viewports** on the two pages not yet
+   screenshotted (policies, and the `the-cut` seminar) --- both clean at
+   1280x800 and 390x844, no console errors, dates consistent (the
+   seminar's 7 April 2027 is the Wednesday after week 7's Monday 5 April
+   lecture, matching the standing lecture/seminar weekday convention).
+2. **Reread `PROCESS.md`** against the brief's actual grading language
+   ("why a call beat the obvious one, and how you knew the result was
+   right"). Found a real gap: the draft only cited build-correctness
+   verification (`pnpm check`, a browser walk) and never mentioned the
+   external fact-checking pass from the prior run, which is the concrete
+   answer to "how did you know the result was right" for course-*content*
+   specifically, as opposed to code correctness. Fixed in `8df26d9`: added
+   a paragraph naming the four fact-check fixes (Hemingway quote,
+   Maimonides/Pseudo-Dionysius gap, Taleb/Antifragile gap, the
+   tutor-called-convenor mislabel) and citing `aa717ae`/`6e5d626`; also
+   updated the browser-walk sentence to list the two newly-checked pages.
+3. **Fresh genericness pass over all twelve lectures**, reading every one
+   end to end against the brief's warning that content "reading as the
+   starter with the nouns swapped" hurts response-to-brief regardless of
+   CI. Clean: each week has a distinct named case (Pseudo-Dionysius/
+   Maimonides, Ni Zan's liubai, Cage's 4'33", Hemingway/Lish-Carver,
+   continuity editing vs. Kuleshov, Pawson/FedEx, Rams's T3/SK4, the
+   file-drawer problem, Erdős's Book, redaction/externalities, the
+   maximalism counter-case), no interchangeable-with-another-course
+   filler found. No fix needed --- a closed-clean check, not a found bug.
 
-Everything else checked out clean on external verification: Lish/Carver
-cut ratio ("more than half," corroborated by multiple sources citing
-50--78%), Taleb's "subtractive knowledge" attribution, Rams's tenth
-principle and the T3/SK4 products, Erdős's Book, Pawson/Nový Dvůr's
-selection story, the file-drawer problem, liubai (already verified in an
-earlier crit per MEMORY.md). Also verified: the favicon "absence" that
-hit every crit-template build does *not* apply here --- this template
-(`astro-theme-slop`) ships its own `slopCrest` SVG favicon via the fixed
-SlopU branding, wired through `astro-theme-university`'s `BaseLayout`,
-already rendering; confirmed present, nothing to add. Assessment weights
-(20/35/45, and each assessment's internal weighted criteria) all still
-sum to 100. All lecture/seminar dates fall on the right weekdays
-(lectures Monday, seminars the following Wednesday) inside the course's
-own start/end range, and each assessment's "due at the end of week N"
-prose matches its actual `due:` date. All four fixes verified rendering
-correctly via `curl` against a `pnpm preview` build (with the GitHub
-Pages base path, `/comp4020-ass2-yunlin/` --- the bare root 404s under
-`pnpm preview`, don't forget the base prefix when curling this repo's
-preview server) before the server was shut down.
-
-Also re-fetched and reread the assignment-2 brief in full this run
-(https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/api/assessments/assignment-2.json)
-to confirm the existing build still matches it --- it does: SLOP3268 is
-niche, twelve dated weeks, one lecture (week 1) links a real deck,
-weights sum to 100, `spec/assessment-weights.test.ts` exists,
-`PROCESS.md`/`CLAUDE.md`/commit history are all in place.
+`pnpm check` and `pnpm check:evidence` both re-run clean after the
+PROCESS.md edit.
 
 ## Next run
 
-Not the final run yet. Deepen-phase candidates, since the obvious
-fact-check/consistency/absence passes are now exhausted:
+Not the final run yet. The obvious deepen passes (fact-check,
+cross-page consistency, browser walk at both viewports across most
+pages, genericness, PROCESS.md-vs-brief reread) are now largely
+exhausted across three runs. Candidates for a next pass, roughly in
+order of likely yield:
 
-1. A live `agent-browser` pass (not just `curl`) at both marking
-   viewports on a couple of pages not yet screenshotted this build ---
-   the prior run's browser-verification note covers homepage, one
-   lecture+deck, one assessment, one person page and the mobile nav
-   menu, but not the policies page or a seminar page specifically.
-2. Reread `PROCESS.md` against the brief's actual grading emphasis one
-   more time now that the brief's full text has been re-confirmed this
-   run --- it wants explanation of *why* a decision was made over the
-   obvious alternative and *how* it was verified, for both technical and
-   course-design choices; check whether the fact-checking discipline
-   itself (this run and past ones) is cited as one of those verification
-   methods, since it's a concrete, real answer to "how did you verify
-   the result was correct" for course-design content specifically.
-3. Consider whether any of the twelve lectures reads as fungible/generic
-   per the brief's own warning ("a site that merely swaps nouns into the
-   starter template" hurts response-to-brief regardless of CI) --- a
-   fresh read for genericness, not factual accuracy, hasn't been done
-   explicitly as its own pass.
+1. A handful of pages still not individually screenshotted at both
+   viewports: the remaining four seminars (`orientation`,
+   `painting-and-silence`, `the-null-result`, `the-sentence-not-written`),
+   the lectures index, and the assessments not yet screenshotted
+   individually (only one assessment page has been walked so far).
+2. Try a genuinely new question rather than re-verifying an
+   already-green angle (per the crit-4/crit-5 lesson in MEMORY.md that a
+   fresh question outperforms re-checking the same checklist): e.g. does
+   any cross-reference (`related:` field) point at a slug that doesn't
+   exist, or point in a direction that reads odd when followed (already
+   covered by the broken-links checker for URLs, but `related:` slugs are
+   course-graph edges, not `<a>` tags --- worth confirming the
+   broken-links checker or the course-graph build step actually validates
+   those edges, not just rendered hyperlinks).
+3. Reread the assessment pages themselves (not just their weights) for
+   the same genericness question run on the lectures this run --- do the
+   three assessments (Commonplace Book, the null-result practice, the
+   argument by omission) each demand something specific to *this*
+   course's thesis, or could any read as a generic essay/portfolio task.
 4. Re-run `pnpm check` + `pnpm check:evidence` after any further edits.
 
 Not this agent's job at any point: making the repo public, turning on
