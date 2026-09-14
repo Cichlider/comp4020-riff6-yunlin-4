@@ -14,7 +14,7 @@ Pseudo-Dionysius's move, formalised: God is not good, not wise, not
 existent --- not because these are false, but because any word drawn from
 creation is too small for what it's describing, and saying so is more
 accurate than reaching for a bigger word. Maimonides ran the same
-argument through Aristotelian logic three centuries later and called it
+argument through Aristotelian logic seven centuries later and called it
 the only theology that doesn't eventually lie. The Cloud of Unknowing took
 it further still: not just unsayable, but unthinkable, approached by
 "a dart of longing love" rather than an idea at all.

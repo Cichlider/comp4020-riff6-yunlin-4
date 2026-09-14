@@ -14,8 +14,8 @@ related:
 
 Hemingway's own account: he cut the real ending of "Out of Season"
 entirely --- a suicide --- on the theory that a reader feels the missing
-part even unstated, "if a writer knows enough of what he is writing
-about." Whether that's true or a writer's after-the-fact justification
+part even unstated, "if a writer of prose knows enough of what he is
+writing about." Whether that's true or a writer's after-the-fact justification
 for an editorial accident is exactly the kind of question this course
 keeps landing on, and this week is where we argue it directly rather than
 taking either theology or painting's word for it.

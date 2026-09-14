@@ -30,6 +30,6 @@ rather than after.
 
 ## Afterwards
 
-Both convenors hold open office hours through the following two weeks
+Both teachers hold open office hours through the following two weeks
 specifically for final-project questions --- this is the last seminar of
 the semester, but not the last chance to talk about the work.
