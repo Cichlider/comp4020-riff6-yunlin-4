@@ -54,13 +54,33 @@ inside "not on volume:"). Both were fixed by rewording rather than
 quoting, since the em-dash convention I already use elsewhere reads
 better than an escaped colon would have.
 
+`pnpm check` and a browser walk answer "does the site work," but they
+can't tell you whether a lecture's own claims are true --- so I treated
+every checkable historical or numeric claim across all twelve lectures,
+six seminars, three assessments and the deck as its own thing to verify
+against external sources, not just proofread. That pass found four real
+errors and fixed all of them
+([`aa717ae`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/aa717ae),
+[`6e5d626`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/6e5d626)):
+a Hemingway quote had silently dropped a word from the real *Death in
+the Afternoon* line; two separate "N centuries later" claims (Maimonides
+answering Pseudo-Dionysius, and Taleb's *Antifragile* naming the same
+move) were each invented independently and each undercounted the actual
+gap by three to four centuries, an error only visible by subtracting the
+two real dates rather than checking each date alone; and two pages called
+a `role: tutor` person a "convenor," a title only the other teacher
+actually holds. None of those are catchable by a typecheck or a link
+checker --- they're wrong in a way only a fact-check catches, which is how
+I know the course's factual content is right, as distinct from knowing
+the site renders.
+
 Before treating any of it as done I ran `pnpm check` (typecheck, build,
 axe accessibility, link/deck validation, and the vitest suite including
 my own weight-sum test) clean, then walked the built `pnpm preview` site
 with `agent-browser` at both desktop and the 390px mobile marking
 viewport --- homepage, a lecture with its deck, an assessment, a person
-page, and the mobile nav menu --- with a clean console throughout, before
-stopping the preview server.
+page, the policies page, a seminar, and the mobile nav menu --- with a
+clean console throughout, before stopping the preview server.
 
 ## Before you ship
 
