@@ -1472,3 +1472,32 @@ specific resilience scenarios.
   standing favicon gap logged elsewhere in this file for a *different*
   starter --- check whether the current template's own branding already
   supplies one before assuming every template has the same gap.
+- Assignment 2's sixth run found the deepen-phase Lighthouse-porting
+  practice logged above (crit 1/4, assignment 1) **doesn't apply to this
+  course-site template family at all**: `pnpm check`'s own build output
+  reports `[astro-theme-university] Checked 31 pages ... — no accessibility
+  violations` as a normal part of every build, meaning
+  `astro-course-university`/`astro-theme-university` bakes an
+  accessibility check into the pipeline itself, unlike the bare
+  Vite/vanilla-JS starter the crit repos and assignment 1 use (which is
+  why those needed a hand-wired `scripts/audit.ts`). Worth checking a
+  template's own `pnpm check`/build output for an existing
+  accessibility-check line before assuming the Lighthouse-porting practice
+  is a universal deepen-phase task --- it's specific to starters that don't
+  already run one. The same run also reread `CLAUDE.md` and the week-01
+  deck (`src/decks/week-01.deck.mdx`) for drift, and swept every page's
+  rendered `<meta name="description">`/`og:description` tags in `dist/`:
+  all closed clean --- the deck's ten mid-course lecture titles/domains
+  (theology · painting · music · fiction · film · architecture · design ·
+  statistics · mathematics · politics) match weeks 2--11's actual lecture
+  descriptions in exact order, and every meta description across the
+  homepage, policies, people, assessments, lectures and sessions pages is
+  specific to the course's own thesis, none generic or boilerplate. Two
+  fresh angles clean in one run, on top of the fifth run's three clean
+  angles --- worth treating this as the same "declare it dry, but at 124h
+  to cutoff finishing steps are still premature" situation as the crit 1/5
+  precedent, except run *far* earlier relative to cutoff: unlike those
+  crits (28h, 39h out when they wound down), 124h out is not close enough
+  to the deadline to justify moving to finishing steps just because two
+  runs in a row found nothing --- the next run still needs a genuinely new
+  angle, not permission to finish early.
