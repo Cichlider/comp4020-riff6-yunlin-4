@@ -1,89 +1,65 @@
 # now
 
-Fifth run, deepen phase (135h to cutoff at start of this run). Working tree
-clean throughout --- no code changes this run, only verification. `pnpm check`
-and `pnpm check:evidence` both pass clean (re-confirmed, no edits since).
+Sixth run, deepen phase (124h to cutoff at start of this run --- still far
+from cutoff, not close to finishing-steps territory). Working tree clean
+throughout --- no code changes this run, only verification. `pnpm check`
+passes clean.
 
 ## What this run did
 
-Closed out the fourth run's two queued candidates, both clean:
+Closed out the fifth run's two queued candidates, both clean:
 
-1. **Reread policies and homepage copy** against the brief's exact spec
-   bullets --- both still argue the course's own thesis, nothing generic or
-   drifted.
-2. **Screenshotted `people/index` and both individual person pages** at both
-   marking viewports (1280x800, 390x844) --- clean console throughout,
-   closing out the browser-walk completeness the fourth run left open. Every
-   distinct page in the site has now been screenshotted at both viewports
-   across runs 3--5.
+1. **Reread `CLAUDE.md`** against the current built state --- its rules
+   (thesis-per-entry, no filler weeks, weights sum to 100, no thirteenth
+   week/fourth assessment) all still hold: 12 lectures, 6 sessions, 3
+   assessments weighted 45/35/20, no drift.
+2. **Reread the week-01 deck** (`src/decks/week-01.deck.mdx`) for
+   genericness now that lectures/assessments have both had that pass. Its
+   "twelve weeks, one move" slide lists ten domains (theology · painting ·
+   music · fiction · film · architecture · design · statistics ·
+   mathematics · politics) --- checked these against weeks 2--11's actual
+   lecture titles/descriptions and they match in exact order. The
+   previously-fixed "fifteen centuries" Pseudo-Dionysius-to-Taleb figure
+   (commit `6e5d626`) is still correct.
 
-Then tried several genuinely new angles (per the standing "ask a new
-question, don't re-verify the checklist" lesson), all closed clean --- no
-bugs found, but each is a real check discharged:
+Then found one genuinely new angle and one negative result, both clean:
 
-- **The frontmatter-field silent-drop hunt** the fourth run flagged (any
-  field besides `related:` that's a plain string/array rather than a typed
-  `reference()`): read `astro-course-university`'s `node-schema.ts` and this
-  site's own `content.config.ts`. `teachers:` is a typed `reference("people")`
-  (build-time validated). The one candidate, `slides:` (a regex-validated
-  plain string on lectures, `/decks/<slug>/`), renders as a real `<a href>`
-  in `[slug].astro` --- confirmed via `pnpm check` output that
-  `astro-broken-links-checker` runs on every build and catches exactly this
-  class of broken link, unlike `related:` (consumed by a helper that silently
-  drops unresolved refs and never renders a link at all, which is why that
-  one needed its own test). No new gap.
-- **Cross-collection date/week arithmetic**: `data-integrity.test.ts` only
-  checks dates fall inside the teaching period, not that they agree with each
-  other. Manually verified all three collections align: lecture dates step
-  exactly 7 days apart matching `week:`, session dates are each lecture
-  week's date +2 days, assessment due dates land sensibly relative to their
-  `week:` (end of the same or next week), and course start/end dates give a
-  sane ~95-day span for 12 teaching weeks. All consistent, no drift.
-- **Favicon**: confirmed wired end-to-end (`slopBranding.favicon` ->
-  `siteConfig` -> `ContentLayout` -> `BaseLayout`'s `<link rel="icon">`,
-  present in the built HTML) --- this is supplied by the fixed SlopU
-  branding, not a starter gap this course build is responsible for filling
-  (unlike the standing crit-family favicon gap logged in `MEMORY.md`, which
-  is about a different starter template).
-- **`dist/llms.txt` reread** for genericness/cross-page fact consistency (a
-  text-emitting channel not yet reviewed this deliverable): every
-  week/session description is specific to this course's thesis, and the two
-  seminar blurbs that reference assessment due dates ("due at the end of
-  next week" / "due at the end of this same week") check out exactly against
-  the real due dates once the day-of-week arithmetic above was worked
-  through.
-- **Pagefind search**, live in the browser against the built preview server:
-  searched "omission", got three relevant, correctly-ranked results with
-  highlighted matches. One result's card title read as the generic
-  "Assessment — Slop University" rather than a specific assessment name ---
-  investigated before flagging as a bug, and it's correct: that result is
-  the assessments *index* page (whose own `<title>` genuinely is "Assessment
-  — Slop University"), which legitimately lists all three assessments in
-  one flowing page, so the excerpt spanning two adjacent entries is expected
-  behaviour, not a title/indexing bug.
-- **Mobile nav toggle and dark-theme toggle**, live at 390x844: both open
-  and render cleanly, no console errors, brand accent and body text both
-  legible in dark mode.
-- Confirmed no external links exist anywhere in `src/content/` --- nothing
-  to link-check there.
+- **Lighthouse audit-porting doesn't apply here**: checked whether this
+  template needs the accessibility+performance sensor ported per the
+  standing crit-1/4/assignment-1 practice in `MEMORY.md`. It doesn't ---
+  `pnpm check`'s own build output already runs
+  `[astro-theme-university] Checked 31 pages ... — no accessibility
+  violations` as a normal part of every build. That practice is specific
+  to the bare Vite starters those other repos use; this template family
+  bakes the check in. Confirmed, not a gap to close.
+- **Meta/og description sweep**: read every rendered `<meta
+  name="description">`/`og:description` in `dist/` (homepage, policies,
+  people, assessments, and sample lecture/session pages) --- all specific
+  to the course's own thesis, none generic or boilerplate, none leaking
+  instruction-style text.
 
 ## Next run
 
-Six rounds deep now with nothing broken found in the last two. Candidates
-that haven't been tried yet, roughly in order of likely yield:
+Two runs in a row (fifth, sixth) have each found two clean angles and no
+bugs. Per the crit-1/5 precedent this is the tell to wind toward finishing
+steps *when close to cutoff* --- but at 124h out that precedent doesn't
+apply yet; this is not the signal to finish, just the signal that the next
+run needs a genuinely new question, not a re-verification. Untried
+candidates:
 
-1. Reread `CLAUDE.md` (this repo's own, `587aa82`) against the current
-   built state for drift --- it hasn't been re-checked since the run that
-   wrote it, and the "does the file still describe the repo accurately"
-   question hasn't been asked of it yet.
-2. Reread the week-01 deck (`week-01.deck.mdx`) one more time for
-   genericness now that lectures/assessments have both had that pass ---
-   the fact-check on it (Pseudo-Dionysius/Taleb gap) is already fixed and
-   confirmed consistent, but genericness is a different question.
-3. If both of those come back clean too, this is a real signal to start
-   winding down the deepen phase per the crit 1/5 precedent in `MEMORY.md`:
-   a fresh angle finding nothing, twice in a row, is the tell to move
-   toward finishing steps rather than invent a fourth.
+1. Reread `src/site-config.ts` and `astro.config.ts` against the actual
+   built site for any stale/copy-pasted-from-template values (site name,
+   description, nav structure) that haven't been checked yet.
+2. Check the two people bios (`idris-fenn.md`, `marisol-quaye.md`) for
+   internal consistency with what they're credited with teaching
+   (`teachers:` on lectures/sessions) --- do the bios' claimed
+   specialities match what each person actually teaches in the syllabus?
+3. A live `agent-browser` pass specifically hunting for a
+   feel/legibility issue by *playing* the site as a prospective student
+   (following nav from homepage through to an assessment page) rather
+   than reading source --- the "one change that came from playing, not
+   reading" habit logged for crit 5 hasn't been explicitly tried on this
+   deliverable yet, even though it's a content site rather than a game.
 
 Not this agent's job at any point: making the repo public, turning on
 GitHub Pages, or otherwise publishing/deploying --- the harness does that
