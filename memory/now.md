@@ -1,73 +1,89 @@
 # now
 
-Fourth run, deepen phase (141h to cutoff at start of this run). Working
-tree clean, `pnpm check` and `pnpm check:evidence` both pass clean.
+Fifth run, deepen phase (135h to cutoff at start of this run). Working tree
+clean throughout --- no code changes this run, only verification. `pnpm check`
+and `pnpm check:evidence` both pass clean (re-confirmed, no edits since).
 
 ## What this run did
 
-Worked the third run's queued candidates, in order:
+Closed out the fourth run's two queued candidates, both clean:
 
-1. **The genuinely-new-question candidate**: does every `related:` slug
-   actually resolve? Read `astro-course-university`'s
-   `content-helpers.ts` and confirmed `related` is a plain
-   `z.array(z.string())`, not a typed `reference()` like `teachers:` ---
-   so a typo'd slug never fails a build or typecheck, and
-   `getRelatedEntries` silently drops any ref that doesn't resolve to a
-   pool entry (`pool.get(ref)` returning `undefined`), with no error and
-   no broken `<a>` for the astro build's own link checker to catch (it
-   only sees rendered hyperlinks). Manually verified all 21 current
-   `related:` declarations resolve correctly, then added
-   `spec/related-refs.test.ts` (`08a05a5`) so a future edit can't
-   reintroduce the same invisible gap --- confirmed it actually catches a
-   deliberately-introduced typo before trusting the clean pass.
-2. **Reread the three assessments for genericness**, the same question
-   already run on the twelve lectures. Clean: each demands something
-   specific to this course's thesis (a named omission and a defence,
-   engaging named weeks, addressing week 12's counter-case by name) ---
-   none reads as a generic essay/portfolio task.
-3. **Browser pass at both marking viewports** on every page not yet
-   individually screenshotted: the lectures index, the four remaining
-   seminars (orientation, painting-and-silence, the-null-result,
-   the-sentence-not-written), and all three assessment detail pages.
-   Clean console throughout, all render correctly at 1280x800 and
-   390x844.
-4. **Found and fixed a real spec violation while reviewing `PROCESS.md`
-   to cite the new commit**: the brief states `PROCESS.md` must run
-   400--600 words, and the draft was 668 prose words (measured with
-   markdown link URLs stripped) --- over the ceiling, and
-   `check-evidence.ts` only checks citations resolve, never a word
-   count, so nothing had caught this. Trimmed throughout while folding
-   in the `related-refs` commit as a second cited example of a
-   course-design decision encoded as a `spec/` check (`a67dd65`); now
-   562 words, still 9 citations, all resolving.
+1. **Reread policies and homepage copy** against the brief's exact spec
+   bullets --- both still argue the course's own thesis, nothing generic or
+   drifted.
+2. **Screenshotted `people/index` and both individual person pages** at both
+   marking viewports (1280x800, 390x844) --- clean console throughout,
+   closing out the browser-walk completeness the fourth run left open. Every
+   distinct page in the site has now been screenshotted at both viewports
+   across runs 3--5.
+
+Then tried several genuinely new angles (per the standing "ask a new
+question, don't re-verify the checklist" lesson), all closed clean --- no
+bugs found, but each is a real check discharged:
+
+- **The frontmatter-field silent-drop hunt** the fourth run flagged (any
+  field besides `related:` that's a plain string/array rather than a typed
+  `reference()`): read `astro-course-university`'s `node-schema.ts` and this
+  site's own `content.config.ts`. `teachers:` is a typed `reference("people")`
+  (build-time validated). The one candidate, `slides:` (a regex-validated
+  plain string on lectures, `/decks/<slug>/`), renders as a real `<a href>`
+  in `[slug].astro` --- confirmed via `pnpm check` output that
+  `astro-broken-links-checker` runs on every build and catches exactly this
+  class of broken link, unlike `related:` (consumed by a helper that silently
+  drops unresolved refs and never renders a link at all, which is why that
+  one needed its own test). No new gap.
+- **Cross-collection date/week arithmetic**: `data-integrity.test.ts` only
+  checks dates fall inside the teaching period, not that they agree with each
+  other. Manually verified all three collections align: lecture dates step
+  exactly 7 days apart matching `week:`, session dates are each lecture
+  week's date +2 days, assessment due dates land sensibly relative to their
+  `week:` (end of the same or next week), and course start/end dates give a
+  sane ~95-day span for 12 teaching weeks. All consistent, no drift.
+- **Favicon**: confirmed wired end-to-end (`slopBranding.favicon` ->
+  `siteConfig` -> `ContentLayout` -> `BaseLayout`'s `<link rel="icon">`,
+  present in the built HTML) --- this is supplied by the fixed SlopU
+  branding, not a starter gap this course build is responsible for filling
+  (unlike the standing crit-family favicon gap logged in `MEMORY.md`, which
+  is about a different starter template).
+- **`dist/llms.txt` reread** for genericness/cross-page fact consistency (a
+  text-emitting channel not yet reviewed this deliverable): every
+  week/session description is specific to this course's thesis, and the two
+  seminar blurbs that reference assessment due dates ("due at the end of
+  next week" / "due at the end of this same week") check out exactly against
+  the real due dates once the day-of-week arithmetic above was worked
+  through.
+- **Pagefind search**, live in the browser against the built preview server:
+  searched "omission", got three relevant, correctly-ranked results with
+  highlighted matches. One result's card title read as the generic
+  "Assessment — Slop University" rather than a specific assessment name ---
+  investigated before flagging as a bug, and it's correct: that result is
+  the assessments *index* page (whose own `<title>` genuinely is "Assessment
+  — Slop University"), which legitimately lists all three assessments in
+  one flowing page, so the excerpt spanning two adjacent entries is expected
+  behaviour, not a title/indexing bug.
+- **Mobile nav toggle and dark-theme toggle**, live at 390x844: both open
+  and render cleanly, no console errors, brand accent and body text both
+  legible in dark mode.
+- Confirmed no external links exist anywhere in `src/content/` --- nothing
+  to link-check there.
 
 ## Next run
 
-Deepen passes now run four rounds deep (fact-check, cross-page
-consistency, browser walk at both viewports across every page,
-genericness on both lectures and assessments, PROCESS.md-vs-brief
-reread twice). Per the standing lesson in `MEMORY.md` (crit 4/5: a fresh
-question outperforms re-verifying an already-green checklist), candidates
-for a next pass, roughly in order of likely yield:
+Six rounds deep now with nothing broken found in the last two. Candidates
+that haven't been tried yet, roughly in order of likely yield:
 
-1. Reread the **policies page** and **homepage** copy against the
-   brief's exact spec bullets one more time --- both were checked early
-   (run 2--3) but before the `related-refs` gap was known to exist; worth
-   a fresh look for the same "silently unenforced by any check" failure
-   shape (e.g. any other frontmatter field, beyond `related:`, that's a
-   plain string/array rather than a typed reference and could silently
-   drop a connection).
-2. `people/index` and the two individual person pages haven't been
-   individually screenshotted this run or last --- quick to close out the
-   browser-walk completeness.
-3. Re-run `pnpm check` + `pnpm check:evidence` after any further edits.
-
-Checked and closed this run, not worth re-opening: the SLOP3268 course
-code's last three digits ("268") were confirmed against
-`f8094c0` (the provisioning harness's own "course code: SLOP1268"
-commit, before this agent's first commit) --- only the leading digit
-changed, 1 to 3, exactly the "you choose the first digit (the level)"
-freedom the brief grants. Not a gap.
+1. Reread `CLAUDE.md` (this repo's own, `587aa82`) against the current
+   built state for drift --- it hasn't been re-checked since the run that
+   wrote it, and the "does the file still describe the repo accurately"
+   question hasn't been asked of it yet.
+2. Reread the week-01 deck (`week-01.deck.mdx`) one more time for
+   genericness now that lectures/assessments have both had that pass ---
+   the fact-check on it (Pseudo-Dionysius/Taleb gap) is already fixed and
+   confirmed consistent, but genericness is a different question.
+3. If both of those come back clean too, this is a real signal to start
+   winding down the deepen phase per the crit 1/5 precedent in `MEMORY.md`:
+   a fresh angle finding nothing, twice in a row, is the tell to move
+   toward finishing steps rather than invent a fourth.
 
 Not this agent's job at any point: making the repo public, turning on
 GitHub Pages, or otherwise publishing/deploying --- the harness does that
