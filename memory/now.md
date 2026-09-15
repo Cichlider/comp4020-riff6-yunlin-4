@@ -1,70 +1,73 @@
 # now
 
-Third run, deepen phase (146.5h to cutoff at start of this run). Working
-tree clean, all three deepen candidates from the prior hand-off closed
-out. `pnpm check` and `pnpm check:evidence` both pass clean.
+Fourth run, deepen phase (141h to cutoff at start of this run). Working
+tree clean, `pnpm check` and `pnpm check:evidence` both pass clean.
 
 ## What this run did
 
-Worked the three candidates the second run's hand-off queued:
+Worked the third run's queued candidates, in order:
 
-1. **Browser pass at both marking viewports** on the two pages not yet
-   screenshotted (policies, and the `the-cut` seminar) --- both clean at
-   1280x800 and 390x844, no console errors, dates consistent (the
-   seminar's 7 April 2027 is the Wednesday after week 7's Monday 5 April
-   lecture, matching the standing lecture/seminar weekday convention).
-2. **Reread `PROCESS.md`** against the brief's actual grading language
-   ("why a call beat the obvious one, and how you knew the result was
-   right"). Found a real gap: the draft only cited build-correctness
-   verification (`pnpm check`, a browser walk) and never mentioned the
-   external fact-checking pass from the prior run, which is the concrete
-   answer to "how did you know the result was right" for course-*content*
-   specifically, as opposed to code correctness. Fixed in `8df26d9`: added
-   a paragraph naming the four fact-check fixes (Hemingway quote,
-   Maimonides/Pseudo-Dionysius gap, Taleb/Antifragile gap, the
-   tutor-called-convenor mislabel) and citing `aa717ae`/`6e5d626`; also
-   updated the browser-walk sentence to list the two newly-checked pages.
-3. **Fresh genericness pass over all twelve lectures**, reading every one
-   end to end against the brief's warning that content "reading as the
-   starter with the nouns swapped" hurts response-to-brief regardless of
-   CI. Clean: each week has a distinct named case (Pseudo-Dionysius/
-   Maimonides, Ni Zan's liubai, Cage's 4'33", Hemingway/Lish-Carver,
-   continuity editing vs. Kuleshov, Pawson/FedEx, Rams's T3/SK4, the
-   file-drawer problem, Erdős's Book, redaction/externalities, the
-   maximalism counter-case), no interchangeable-with-another-course
-   filler found. No fix needed --- a closed-clean check, not a found bug.
-
-`pnpm check` and `pnpm check:evidence` both re-run clean after the
-PROCESS.md edit.
+1. **The genuinely-new-question candidate**: does every `related:` slug
+   actually resolve? Read `astro-course-university`'s
+   `content-helpers.ts` and confirmed `related` is a plain
+   `z.array(z.string())`, not a typed `reference()` like `teachers:` ---
+   so a typo'd slug never fails a build or typecheck, and
+   `getRelatedEntries` silently drops any ref that doesn't resolve to a
+   pool entry (`pool.get(ref)` returning `undefined`), with no error and
+   no broken `<a>` for the astro build's own link checker to catch (it
+   only sees rendered hyperlinks). Manually verified all 21 current
+   `related:` declarations resolve correctly, then added
+   `spec/related-refs.test.ts` (`08a05a5`) so a future edit can't
+   reintroduce the same invisible gap --- confirmed it actually catches a
+   deliberately-introduced typo before trusting the clean pass.
+2. **Reread the three assessments for genericness**, the same question
+   already run on the twelve lectures. Clean: each demands something
+   specific to this course's thesis (a named omission and a defence,
+   engaging named weeks, addressing week 12's counter-case by name) ---
+   none reads as a generic essay/portfolio task.
+3. **Browser pass at both marking viewports** on every page not yet
+   individually screenshotted: the lectures index, the four remaining
+   seminars (orientation, painting-and-silence, the-null-result,
+   the-sentence-not-written), and all three assessment detail pages.
+   Clean console throughout, all render correctly at 1280x800 and
+   390x844.
+4. **Found and fixed a real spec violation while reviewing `PROCESS.md`
+   to cite the new commit**: the brief states `PROCESS.md` must run
+   400--600 words, and the draft was 668 prose words (measured with
+   markdown link URLs stripped) --- over the ceiling, and
+   `check-evidence.ts` only checks citations resolve, never a word
+   count, so nothing had caught this. Trimmed throughout while folding
+   in the `related-refs` commit as a second cited example of a
+   course-design decision encoded as a `spec/` check (`a67dd65`); now
+   562 words, still 9 citations, all resolving.
 
 ## Next run
 
-Not the final run yet. The obvious deepen passes (fact-check,
-cross-page consistency, browser walk at both viewports across most
-pages, genericness, PROCESS.md-vs-brief reread) are now largely
-exhausted across three runs. Candidates for a next pass, roughly in
-order of likely yield:
+Deepen passes now run four rounds deep (fact-check, cross-page
+consistency, browser walk at both viewports across every page,
+genericness on both lectures and assessments, PROCESS.md-vs-brief
+reread twice). Per the standing lesson in `MEMORY.md` (crit 4/5: a fresh
+question outperforms re-verifying an already-green checklist), candidates
+for a next pass, roughly in order of likely yield:
 
-1. A handful of pages still not individually screenshotted at both
-   viewports: the remaining four seminars (`orientation`,
-   `painting-and-silence`, `the-null-result`, `the-sentence-not-written`),
-   the lectures index, and the assessments not yet screenshotted
-   individually (only one assessment page has been walked so far).
-2. Try a genuinely new question rather than re-verifying an
-   already-green angle (per the crit-4/crit-5 lesson in MEMORY.md that a
-   fresh question outperforms re-checking the same checklist): e.g. does
-   any cross-reference (`related:` field) point at a slug that doesn't
-   exist, or point in a direction that reads odd when followed (already
-   covered by the broken-links checker for URLs, but `related:` slugs are
-   course-graph edges, not `<a>` tags --- worth confirming the
-   broken-links checker or the course-graph build step actually validates
-   those edges, not just rendered hyperlinks).
-3. Reread the assessment pages themselves (not just their weights) for
-   the same genericness question run on the lectures this run --- do the
-   three assessments (Commonplace Book, the null-result practice, the
-   argument by omission) each demand something specific to *this*
-   course's thesis, or could any read as a generic essay/portfolio task.
-4. Re-run `pnpm check` + `pnpm check:evidence` after any further edits.
+1. Reread the **policies page** and **homepage** copy against the
+   brief's exact spec bullets one more time --- both were checked early
+   (run 2--3) but before the `related-refs` gap was known to exist; worth
+   a fresh look for the same "silently unenforced by any check" failure
+   shape (e.g. any other frontmatter field, beyond `related:`, that's a
+   plain string/array rather than a typed reference and could silently
+   drop a connection).
+2. `people/index` and the two individual person pages haven't been
+   individually screenshotted this run or last --- quick to close out the
+   browser-walk completeness.
+3. Re-run `pnpm check` + `pnpm check:evidence` after any further edits.
+
+Checked and closed this run, not worth re-opening: the SLOP3268 course
+code's last three digits ("268") were confirmed against
+`f8094c0` (the provisioning harness's own "course code: SLOP1268"
+commit, before this agent's first commit) --- only the leading digit
+changed, 1 to 3, exactly the "you choose the first digit (the level)"
+freedom the brief grants. Not a gap.
 
 Not this agent's job at any point: making the repo public, turning on
 GitHub Pages, or otherwise publishing/deploying --- the harness does that
