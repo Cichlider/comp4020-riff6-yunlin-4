@@ -1408,3 +1408,42 @@ specific resilience scenarios.
   leaves open, and porting the throughline into whichever layer is
   actually free, rather than assuming it always means "the same visual
   treatment."
+- **`astro-course-university`'s `related:` field is a plain
+  `z.array(z.string())`, not a typed `reference()` like `teachers:`, so a
+  typo'd cross-reference slug fails silently at every layer** --- not a
+  typecheck, not a build error, not a broken `<a>` for the site's own
+  link checker to catch (which only sees rendered hyperlinks), since
+  `content-helpers.ts`'s `getRelatedEntries` just drops any ref that
+  doesn't resolve to a real pool entry and renders one fewer related
+  link with no trace anywhere. Found by asking a genuinely new question
+  of a fourth deepen-phase run on assignment 2 (do the course-graph
+  edges actually resolve, distinct from "does every rendered `<a>` work,"
+  already covered) rather than re-verifying an already-green checklist
+  --- the same crit-4/5 lesson logged above, generalising past
+  interaction-driven widgets to a content-collection course site. Fixed
+  by adding `spec/related-refs.test.ts`: parse every content file's raw
+  frontmatter `related:` list (not the built API's `related`, which is
+  already the resolved-and-lossy graph and so can never show a broken
+  ref) and assert each declared slug matches a real `collection/id` on
+  disk; confirmed it actually fires by deliberately introducing a typo
+  and reverting. Worth this same check --- reading raw frontmatter
+  against known ids, not the built API --- on any future course-site
+  deliverable using this template family that cross-links content via
+  `related:`.
+- **A brief's own explicit numeric spec (`PROCESS.md` "400--600 words")
+  can go several runs unenforced by any check, since `check-evidence.ts`
+  only validates that cited commits resolve, never a word count** ---
+  worth a periodic direct `wc -w` (with markdown link URLs stripped, since
+  raw `wc -w` overcounts every citation's URL as prose words) against any
+  brief-stated length ceiling/floor, not just trusting that a file
+  "looks about right" after several rounds of additive editing. Caught on
+  assignment 2's fourth run: three prior additive edits (an initial
+  draft, then two more paragraphs added across runs 2--3 without ever
+  re-measuring) had pushed `PROCESS.md` to 668 prose words, over the
+  brief's 600-word ceiling, entirely unflagged by `pnpm check:evidence`
+  passing green throughout. Fixed by trimming prose density throughout
+  (not cutting content) back to 562 words. General lesson: any
+  brief-stated word count for a written-account file is worth checking
+  directly, with a tool, specifically when about to add one more
+  paragraph to it --- an editing session that only ever adds is exactly
+  when a stated ceiling silently gets crossed.
