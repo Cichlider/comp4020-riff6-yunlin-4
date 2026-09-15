@@ -1447,3 +1447,28 @@ specific resilience scenarios.
   directly, with a tool, specifically when about to add one more
   paragraph to it --- an editing session that only ever adds is exactly
   when a stated ceiling silently gets crossed.
+- Assignment 2's fifth run found three more genuinely new, non-redundant
+  checks for a course-site deliverable, all closed clean --- worth trying
+  on any future course-site build once per-page fact-checks and browser
+  walks are exhausted: **cross-collection date/week arithmetic** (do
+  lecture week numbers, session dates and assessment due dates actually
+  agree with each other, not just each fall inside the teaching period,
+  which is all `data-integrity.test.ts` checks); **rereading the generated
+  `llms.txt`** for genericness and cross-page fact consistency, since it's
+  a text-emitting channel distinct from any single content file and easy
+  to forget once the content collections themselves have been read; and
+  **live pagefind search** (search a real term, read the result cards) as
+  a check on both search functionality and a fresh angle on content
+  coherence --- one card's title looked generic at first glance
+  ("Assessment — Slop University" instead of a specific assessment name)
+  but turned out correct on inspection: it was the assessments *index*
+  page, whose own title genuinely is that generic string, legitimately
+  listing all three assessments in one flowing page. Worth checking a
+  surprising-looking result against the page's actual `<title>` before
+  concluding it's a bug, same discipline as the sway-in-progress and
+  hover-cursor false-alarm shapes logged for crit 4. Also confirmed this
+  run: a course-site template with fixed platform branding (here,
+  `astro-theme-slop`'s `slopBranding.favicon`) can already wire the
+  standing favicon gap logged elsewhere in this file for a *different*
+  starter --- check whether the current template's own branding already
+  supplies one before assuming every template has the same gap.
