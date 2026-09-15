@@ -7,80 +7,75 @@ that takes one discipline's version of "leaving something out" per week
 (apophatic theology, literati ink painting, musical silence, minimalist
 fiction, film editing, architecture, graphic design, null results,
 mathematics, political omission) and closes on a week that turns the
-course's own thesis on itself. The idea behind it: restraint isn't a
-single trick, it's a family of moves that different fields have each
-independently formalised, and a student who's seen six versions of it
-should start noticing the seventh unprompted.
+course's own thesis on itself. Restraint isn't a single trick, it's a
+family of moves different fields each independently formalised, and a
+student who's seen six versions of it should start noticing the
+seventh unprompted.
 
 ## How I got here
 
-I started from the fetched brief's spec --- a real twelve-week syllabus,
-one lecture with a real deck, assessment weights summing to 100%, and
-custom `spec/` checks protecting my own promises --- and picked the
-subject before touching any code, since the redesign lesson I already
-carry from other work is that the subject choice is itself where the
-argument lives, not a precondition to it
-([`93d3adc`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/93d3adc)).
-I chose subtraction-across-disciplines specifically because it let me
-extend an existing aesthetic interest of mine (Ni Zan's "taste is what
-you leave out") into course *content* rather than visual style, since
-this template's branding is fixed and the usual "open look" move wasn't
-available here.
+I picked the subject before touching any code
+([`93d3adc`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/93d3adc)),
+since the subject choice is itself where a course's argument lives, not
+a precondition to it. Subtraction-across-disciplines let me extend an
+existing aesthetic interest of mine (Ni Zan's "taste is what you leave
+out") into course *content* rather than visual style, since this
+template's branding is fixed and the usual "open look" move wasn't
+available.
 
-Content came in dependency order: the course record and renamed
+Content came in dependency order: the course record and
 `sessions → seminars` label first
 ([`93d3adc`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/93d3adc)),
-then the homepage and brand artwork
+then the homepage and artwork
 ([`ab3721d`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/ab3721d)),
 then the two teaching staff
 ([`b8e862e`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/b8e862e))
-so lectures and sessions had someone to reference. The twelve lectures
+so lectures and sessions had someone to reference, then the twelve
+lectures
 ([`1e50df9`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/1e50df9))
 and six seminars
-([`71e3e96`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/71e3e96))
-came together, cross-linked with `related:`. The three assessments
-(20/35/45%) came with a custom check
-([`9c2ac20`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/9c2ac20))
---- I wrote `spec/assessment-weights.test.ts` because the schema's own
+([`71e3e96`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/71e3e96)),
+cross-linked with `related:`. The three assessments (20/35/45%) came
+with a custom check
+([`9c2ac20`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/9c2ac20)):
+`spec/assessment-weights.test.ts`, because the schema's own
 weighted-marking validator only checks one assessment's *internal*
-criteria sum to 100, never the course-wide total across all three, which
-is exactly the promise the brief actually asks a course to keep.
+criteria sum to 100, never the course-wide total, which is the promise
+the brief actually asks a course to keep.
 
-Two build failures were worth noting: the assessment frontmatter tripped
-the YAML parser twice, both times because a multi-line plain scalar
-contained a bare `word: word` pattern that YAML read as an implicit
-nested mapping key rather than prose (a colon inside "counter-case:" and
-inside "not on volume:"). Both were fixed by rewording rather than
-quoting, since the em-dash convention I already use elsewhere reads
-better than an escaped colon would have.
+A second such check followed once I'd read how `related:` actually
+resolves: it's a plain string array, not a typed schema reference, so a
+typo'd slug silently drops that connection with no build error and no
+broken link to see --- the astro build's own link checker only sees
+rendered `<a>` tags, never these graph edges.
+[`08a05a5`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/08a05a5)
+adds `spec/related-refs.test.ts` to catch that typo before it goes
+invisible, after I confirmed by hand that all twenty-one current
+`related:` declarations already resolve.
 
-`pnpm check` and a browser walk answer "does the site work," but they
-can't tell you whether a lecture's own claims are true --- so I treated
-every checkable historical or numeric claim across all twelve lectures,
-six seminars, three assessments and the deck as its own thing to verify
-against external sources, not just proofread. That pass found four real
-errors and fixed all of them
+`pnpm check` and a browser walk answer "does the site work," but not
+whether a lecture's own claims are true, so I treated every checkable
+historical or numeric claim across the lectures, seminars, assessments
+and deck as its own thing to verify externally, not just proofread.
+That pass found and fixed four real errors
 ([`aa717ae`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/aa717ae),
 [`6e5d626`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/6e5d626)):
-a Hemingway quote had silently dropped a word from the real *Death in
-the Afternoon* line; two separate "N centuries later" claims (Maimonides
-answering Pseudo-Dionysius, and Taleb's *Antifragile* naming the same
-move) were each invented independently and each undercounted the actual
-gap by three to four centuries, an error only visible by subtracting the
-two real dates rather than checking each date alone; and two pages called
-a `role: tutor` person a "convenor," a title only the other teacher
-actually holds. None of those are catchable by a typecheck or a link
-checker --- they're wrong in a way only a fact-check catches, which is how
-I know the course's factual content is right, as distinct from knowing
-the site renders.
+a Hemingway quote had silently dropped a word from the real line; two
+separate "N centuries later" claims (Maimonides answering
+Pseudo-Dionysius, and Taleb's *Antifragile* naming the same move) were
+each invented independently and each undercounted the real gap by
+three to four centuries, visible only by subtracting the two dates
+rather than checking each alone; and two pages called a `role: tutor`
+person a "convenor," a title only the other teacher holds. None of
+those are catchable by a typecheck or a link checker --- they're wrong
+in a way only a fact-check catches, which is how I know the course's
+content is right, as distinct from knowing the site renders.
 
-Before treating any of it as done I ran `pnpm check` (typecheck, build,
-axe accessibility, link/deck validation, and the vitest suite including
-my own weight-sum test) clean, then walked the built `pnpm preview` site
+Before treating a batch of work as done I run `pnpm check` (typecheck,
+build, axe accessibility, link/deck validation, the vitest suite) and
+`pnpm check:evidence` clean, then walk the built `pnpm preview` site
 with `agent-browser` at both desktop and the 390px mobile marking
-viewport --- homepage, a lecture with its deck, an assessment, a person
-page, the policies page, a seminar, and the mobile nav menu --- with a
-clean console throughout, before stopping the preview server.
+viewport, console clean throughout, before stopping the preview server.
 
 ## Before you ship
 
