@@ -1520,3 +1520,58 @@ specific resilience scenarios.
   to the deadline to justify moving to finishing steps just because two
   runs in a row found nothing --- the next run still needs a genuinely new
   angle, not permission to finish early.
+- Assignment 2's eighth run broke a two-run clean streak with two real
+  content bugs, found by two different techniques worth keeping distinct.
+  **Cross-collection date ordering, not just date bounds**: a session
+  (`painting-and-silence`) whose own prose says "read the two set lectures
+  back to back" was dated `2027-03-10` while one of its two `related:`
+  lectures (`lectures/week-04`) was dated `2027-03-15`, five days *later*
+  --- a session referencing a lecture that, by the site's own calendar,
+  hasn't happened yet. `data-integrity.test.ts` only bounds every date to
+  the teaching period and `related-refs.test.ts` only checks a `related:`
+  slug resolves to a real id, so neither caught it; found by asking a
+  third question of the same data ("does the reference make chronological
+  sense," not just "is it in range" or "does it resolve"). Fixed the
+  content (moved the session to week 4, `2027-03-17`) and closed the gap
+  permanently with `spec/session-chronology.test.ts`, which parses raw
+  frontmatter (not the built API) and asserts every session's `related:`
+  lecture date is `<=` the session's own date --- verified it actually
+  fails on the original data via a temporary `sed` revert + `vitest run`
+  before restoring the fix. Worth this same "do the two dates a cross-
+  reference implies actually order correctly" question on any future
+  course-site deliverable with a `related:`-style cross-link field,
+  distinct from both existing checks (bounds-only, resolves-only).
+  **Leftover starter-template scaffolding text as live content**: three
+  index pages (`sessions/index.astro`, `lectures/index.mdx`,
+  `assessments/index.mdx`) — confirmed via `git log` untouched since the
+  very first "Initial commit" — still rendered the starter's own
+  developer-facing instructions ("Weights should sum to 100.", "Set the
+  visible singular and plural names once in `src/site-config.ts`...") as
+  a visible paragraph under the page's h1. Not caught by any prior
+  content read-pass because those passes reread *authored* content
+  collections (lectures/sessions/assessments/people), never the mostly-
+  empty page shells wrapping them. Found only by actually reading the
+  live rendered `innerText` of a page during an unrelated browser-
+  verification step, not by rereading source. Confirmed the text was pure
+  redundant surplus (not filling a documented gap) by checking the
+  theme's `ContentLayout.astro`: the `description` prop already renders
+  as its own visible `<p class="lead">`, so the extra paragraph was never
+  load-bearing. Fixed by deleting, not rewriting. General lesson: on any
+  course-site template, explicitly `git log`-check every page/component
+  file for "still on the initial commit" and read its *rendered* text (not
+  just its source) before assuming the content-collection read-passes
+  already covered everything the site ships — a page can be nearly-empty
+  scaffolding and still be shipping the wrong words.
+  **Compounding the standing "`vite preview` silently picks the next free
+  port" footgun**: in this shared multi-project sandbox, several
+  *entirely unrelated* projects (`llms-unplugged`, `benswift-me`) already
+  had their own `astro dev`/`astro preview` servers bound to ports in the
+  same 4321--4323 range this repo's own preview server also tries first,
+  making it easy to `curl`/screenshot a completely different project's
+  page while believing it's this repo's own build. `ps aux | grep -i
+  astro` (checking each candidate PID's actual working-directory path,
+  not just its port) is what actually resolved it — `ss -ltnp | grep
+  <port>` names the PID holding a port, but only `ps`'s command-line/cwd
+  confirms *which repo* that PID belongs to. Worth this two-step
+  PID-then-path check every time, in this sandbox specifically, rather
+  than trusting a preview server's own stdout port number in isolation.
