@@ -66,10 +66,15 @@ Pseudo-Dionysius, and Taleb's *Antifragile* naming the same move) were
 each invented independently and each undercounted the real gap by
 three to four centuries, visible only by subtracting the two dates
 rather than checking each alone; and two pages called a `role: tutor`
-person a "convenor," a title only the other teacher holds. None of
-those are catchable by a typecheck or a link checker --- they're wrong
-in a way only a fact-check catches, which is how I know the course's
-content is right, as distinct from knowing the site renders.
+person a "convenor," a title only the other teacher holds. A later
+pass, reading rendered pages rather than source, found the same role
+field leaking its raw value into every lecture/seminar page's
+teaching-team list
+([`cc80c80`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-yunlin/commit/cc80c80))
+--- fixed by reusing the people index's label map. None of those are
+catchable by a typecheck or a link checker --- they're wrong in a way
+only a fact-check or a live read catches, which is how I know the
+course's content is right, as distinct from knowing the site renders.
 
 Before treating a batch of work as done I run `pnpm check` (typecheck,
 build, axe accessibility, link/deck validation, the vitest suite) and
