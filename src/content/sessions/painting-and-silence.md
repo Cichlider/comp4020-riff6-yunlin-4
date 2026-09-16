@@ -3,8 +3,8 @@ title: Painting and silence
 description:
   Putting Ni Zan's blank silk next to Cage's rest --- do two disciplines'
   favourite omissions actually argue the same thing?
-week: 3
-date: 2027-03-10
+week: 4
+date: 2027-03-17
 teachers:
   - marisol-quaye
 related:

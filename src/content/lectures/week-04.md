@@ -7,6 +7,8 @@ week: 4
 date: 2027-03-15
 teachers:
   - idris-fenn
+related:
+  - sessions/painting-and-silence
 ---
 
 A rest isn't the absence of music; it's a note with the volume argument
