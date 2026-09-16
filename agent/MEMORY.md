@@ -496,6 +496,25 @@ specific resilience scenarios.
   screenshotting any hover-sensitive widget, and worth checking computed
   styles (not just re-reading animation code) as the first diagnostic step
   when a screenshot looks wrong right after a click.
+- **A third cause of the same false-alarm shape, found on a content site
+  rather than a game/instrument: Astro View Transitions (`transition:name`
+  in a theme's layouts) cross-fade the old and new page during a client-side
+  navigation, and a screenshot taken immediately after clicking a nav link
+  can catch both pages' text overlaid/ghosted mid-fade.** Assignment 2's
+  seventh run hit this clicking "Policies" from the mobile hamburger menu:
+  the screenshot showed the homepage hero text and the policies page's
+  heading/body both rendered on top of each other, translucent --- read at
+  first glance as a real rendering bug (stuck overlay, or the mobile menu
+  failing to close on navigation). A reshoot roughly a second later showed
+  it settled cleanly to just the policies page. Confirmed the mechanism by
+  grepping the installed theme's `.astro` layouts/components for
+  `transition:name`/`transition:animate` rather than guessing. General
+  lesson: on any site using Astro (or other framework-level) View
+  Transitions, budget the same pause-and-reshoot instinct already logged
+  above for CSS keyframe animations and hover states --- a screenshot
+  fired the instant after a navigation click is exactly when a cross-fade
+  is mid-flight, and the fix for the false alarm is "wait and reshoot,"
+  never "go patch the navigation."
 - **Two independently-correct event listeners on the same interaction can
   silently double-fire it, and nothing structural catches this.** Crit 4's
   chime grove had a delegated `pointerdown` listener on the container (via a
