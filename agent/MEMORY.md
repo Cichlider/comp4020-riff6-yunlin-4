@@ -1575,3 +1575,54 @@ specific resilience scenarios.
   confirms *which repo* that PID belongs to. Worth this two-step
   PID-then-path check every time, in this sandbox specifically, rather
   than trusting a preview server's own stdout port number in isolation.
+- **A schema enum can be correctly humanized in one rendering component
+  and leak raw in a sibling component that reads the exact same field**,
+  a different failure shape from the earlier "person called the wrong
+  role in prose" bug this same repo already fixed. `PeopleGrid.astro` had
+  a `roleLabels` map (`convenor` -> "Convenor", `tutor` -> "Tutor", ...)
+  right next to `TeachingTeam.astro`, which instead interpolated
+  `person.data.role` directly, so every lecture/session page with a
+  `teachers:` field (18 of them) rendered "— tutor" / "— convenor" in raw
+  lowercase in its own "Teaching team" section, while the People index
+  page one click away showed the same two people capitalised correctly.
+  Found on the ninth run's repeat of the "reread every never-touched-
+  since-initial-commit file" sweep (the check itself was clean this time
+  --- no more leftover scaffolding text --- but reading those files closely
+  surfaced this instead), not by the sweep's original method. Fixed by
+  copying the same label map into the sibling component. General lesson:
+  once a schema enum needs a display-label map in any one place it's
+  rendered, grep for every other place that same field is read
+  (`person.data.role`, `.status`, `.role`, etc.) and check each one
+  applies the same transform --- a raw-enum leak doesn't trip a typecheck
+  (the field really is a valid enum member) or a link/a11y checker, only
+  a live read of the rendered text catches it, the same "read what it
+  actually says" discipline logged elsewhere in this file for aria-labels
+  and meta descriptions, just for a different field type.
+- **Once a chronology-guard test exists for one relationship in a content
+  graph (a session referencing a lecture that hasn't happened yet), check
+  whether the identical relationship shape exists elsewhere in the same
+  graph before assuming one test covers the whole risk.** A follow-up run
+  asked whether assessments' `related:` lectures/sessions could likewise
+  reference something dated after the assessment's own `due` date ---
+  `session-chronology.test.ts` only ever checked sessions against
+  lectures, never assessments against either collection. Manual check
+  across all three assessments came back clean (every related lecture/
+  session already predates its assessment's due date), but the gap was
+  real: nothing would have caught it if a future edit moved a week around
+  and broke that ordering. Closed with `spec/assessment-chronology.test.ts`,
+  a near-identical guard against `due` instead of `date`, verified against
+  a deliberately-broken due date before restoring. Worth this same "which
+  other edges in the graph have the same shape" question immediately
+  after any chronology/ordering bug is fixed in one place, rather than
+  treating the first fix as coverage for the whole graph.
+- The Astro View Transitions cross-fade ghosting logged elsewhere in this
+  file (assignment 2, seventh run) was confirmed live to be correctly
+  suppressed by `prefers-reduced-motion: reduce`: `agent-browser set
+  media light reduced-motion` plus a nav click showed a clean instant
+  page swap, while the identical click with reduced-motion unset
+  reproduced the ghosting screenshot (both taken to confirm the
+  difference is real, not just "this screenshot happened to look clean").
+  Astro's `<ClientRouter>` has this built in with no theme-side CSS
+  needed --- confirmed rather than assumed from that fact alone, per the
+  standing "the code suggests X is safe" vs. "X is confirmed safe"
+  discipline. Closes that entry's open question; no fix needed.
