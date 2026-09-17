@@ -1,89 +1,101 @@
 # now
 
-Ninth run, deepen phase (100h to cutoff at start of this run --- still
-solidly in deepen territory, not close to finishing steps). One real bug
-found and fixed, both queued candidates from the eighth run closed clean,
-and one new permanent regression test added. Working tree clean, `pnpm
-check` and `pnpm check:evidence` green throughout.
+Tenth run, deepen phase (93h to cutoff at start of this run --- still
+solidly in deepen territory). No bugs found; closed the three candidates
+queued by the ninth run's hand-off, all clean, plus two incidental checks.
+Working tree clean (no code changes this run), `pnpm check` and `pnpm
+check:evidence` green throughout.
 
 ## What this run did
 
-1. **Re-swept never-touched-since-initial-commit files** (the eighth run's
-   standing check for this template) for the scaffolding-text failure
-   shape. Most were clean scaffolding (config, lockfiles, dev-facing docs)
-   or pure data-driven components with no hardcoded prose. Found one real
-   bug in `TeachingTeam.astro`: it rendered `person.data.role` raw (the
-   lowercase schema enum `tutor`/`convenor`) instead of a display label,
-   while `PeopleGrid.astro` right next to it already had the correct
-   `roleLabels` map. Every lecture/session page with a `teachers:` field
-   (18 files) showed "— tutor" / "— convenor" in lowercase. Fixed by
-   reusing the same label map; verified live at the mobile marking
-   viewport (`Idris Fenn — Tutor`, correctly capitalised, clean console).
-   Committed as `cc80c80`.
-2. **Fact-checked the remaining real-world claims** queued by the eighth
-   run (Hemingway/"Out of Season", Carver/Lish's edits, Rams's ten
-   principles and the Braun T3/SK4, Pawson's Nový Dvůr, the FedEx logo,
-   Eisenstein/Kuleshov, Erdős's Book) against WebSearch results. All
-   checked out clean --- no fix needed, a genuine check discharged.
-3. **Reduced-motion / View Transitions check**, queued by the eighth run:
-   confirmed live with `agent-browser set media light reduced-motion`
-   that the theme's Astro `ClientRouter` correctly suppresses the
-   cross-fade ghosting (verified the ghosting is real without
-   reduced-motion first, by screenshotting a normal navigation
-   immediately after click --- homepage hero text visibly ghosted over
-   the People page --- then the identical navigation with reduced-motion
-   set showed a clean instant swap). Astro's `<ClientRouter>` has this
-   built in with no extra CSS needed on this theme's part; nothing to fix.
-4. **New question, not on any prior list**: does the session-chronology
-   bug shape (a page referencing material that hasn't happened yet by the
-   site's own calendar) also apply to assessments' `related:` refs
-   against their own `due` date, not just sessions' against lectures?
-   Checked all three assessments by hand --- all clean, every related
-   lecture/session predates its assessment's due date. Wrote
-   `spec/assessment-chronology.test.ts` as a permanent guard anyway
-   (verified it actually fails via a temporary due-date edit before
-   restoring), since `session-chronology.test.ts` only covered half of
-   this failure shape. Committed as `9e771a9`.
-5. Updated `PROCESS.md` to cite the `TeachingTeam` fix as a second example
-   of the role-labelling bug family (the first, prose-level instance was
-   already cited from an earlier run) --- checked the word count stays
-   under the brief's 600-word ceiling (595--597 by prose word count with
-   citation URLs/markup stripped; raw `wc -w` reads 616, which overcounts
-   per the standing lesson on this). Committed as `17cfa89`.
+1. **Live-tested the dark/light theme toggle** (`.at-footer-theme-toggle`),
+   untried until now. Confirmed via `agent-browser`: initial `auto` state
+   resolves to `light` (matching system preference), clicking the toggle
+   flips `document.documentElement.dataset.theme` and writes
+   `localStorage.at-theme`, a reload preserves the choice, and toggling
+   back to light and console output stayed clean throughout. Screenshotted
+   the homepage and lectures index in dark mode --- the orange brand accent
+   and body text both read cleanly against the dark surface. This project
+   has no custom CSS/colours of its own (`src/decks/theme.css` is a single
+   import, deliberately, per its own header comment) so there was no
+   accent-colour risk to check beyond what the theme already handles.
+2. **Reread all three assessments' `spec:`/`marking:` blocks against the
+   twelve lectures' and six sessions' actual content**, untried until now
+   as a distinct question from the already-automated chronology/weight-sum
+   checks. All checked out: `commonplace-book-of-cuts`'s "at least 4
+   different disciplines" across weeks 1--5 is exactly satisfiable
+   (theology x2, painting, music, fiction); `the-argument-by-omission`'s
+   "directly addresses week 12's counter-case" matches week-12.md's actual
+   content almost verbatim ("not every cut earns its keep" in the lecture
+   vs. "why this particular omission earns its keep" in the spec); every
+   assessment's `related:` sessions/lectures are topically apt, not just
+   chronologically valid.
+3. **Rereread `src/decks/week-01.deck.mdx`** for drift since the
+   TeachingTeam and chronology fixes landed --- clean, no stale references;
+   the "fifteen centuries" Taleb/apophatic claim (previously corrected
+   from a wrong "twelve centuries" in an earlier run) is still consistent,
+   the disciplines list and assessment weights/dates still match the
+   content collections exactly.
+4. **Two incidental checks prompted by the above**, both clean: opened
+   `card.png` and `hero-home.avif` directly to confirm neither has any
+   baked-in instruction/prose text (both are abstract brush-stroke
+   graphics, no words) --- a check this repo's brief doesn't forbid
+   instructions the way Far Bank's did, but worth ruling out anyway since
+   it's cheap once the image-reading technique exists from that crit.
+   Also confirmed the favicon gap logged elsewhere in MEMORY.md for other
+   templates doesn't apply here: `astro-theme-slop`'s branding already
+   supplies `<link rel="icon" ... slop-crest...svg">` in every page's
+   `<head>` (a plain `/favicon.ico` 404s, which is expected --- the SVG
+   link is what browsers actually use).
+5. Considered, but did not treat as a bug: Idris Fenn's bio
+   (`people/idris-fenn.md`) says he "marks the two studio-based
+   assessments," but only one assessment (`a-practice-in-subtraction`) is
+   tagged `studio` in frontmatter --- `the-argument-by-omission` is tagged
+   `final project`. No `marker`/`grader` field exists anywhere in the
+   schema, and assessment tags are never rendered visibly on any page (the
+   assessments index only shows title/description/due/weight), so this
+   isn't a self-referential claim a reader could check against the site's
+   own visible categorisation the way the crit 1 SVG-count bug was --- it
+   reads as a defensible loose gloss (both `a-practice-in-subtraction` and
+   `the-argument-by-omission` are "make a piece" assessments, unlike the
+   observational `commonplace-book-of-cuts`), not a miscount. Left as is;
+   worth a second look only if a future run finds tags being rendered
+   somewhere that would make the claim checkable against visible content.
 
 ## Next run
 
-No untried candidates left queued from before this run. Angles already
-exhausted across recent runs: per-page and cross-page fact-checks,
-session/assessment chronology (now both directions), related-refs
-resolution, off-screen-text channels (README/comments), llms.txt/
-llms-full.txt rereads, PROCESS.md word count, reduced-motion/View
-Transitions, the never-touched-since-initial-commit scaffolding sweep
-(now closed on all remaining candidates), dark/light toggle not yet
-explicitly tested live (theme-provided, low risk, but untried).
+Angles now exhausted across all runs to date: per-page and cross-page
+fact-checks, session/assessment chronology (both directions, automated),
+related-refs resolution, off-screen-text channels (aria-labels, meta
+description, README/comments, now also checked: committed images),
+llms.txt/llms-full.txt rereads, PROCESS.md word count, reduced-motion/View
+Transitions, the never-touched-since-initial-commit scaffolding sweep,
+dark/light theme toggle (now tested), assessment spec/marking blocks vs.
+actual content (now tested), deck content drift (now tested), favicon
+(confirmed theme-supplied).
 
-Candidates for the next run, roughly in order of how untried they are:
+Candidates for the next run, genuinely untried so far:
 
-1. **Live-test the dark/light theme toggle** in the footer (`.at-footer
-   -theme-toggle`) --- confirm it actually flips `data-theme` and persists
-   via `localStorage` across a reload, and that course content (the
-   `--seal`-style accent, if any custom colours were added) still reads
-   correctly in dark mode. Untried so far this build.
-2. **Reread the assessment `spec:`/`marking:` blocks** against the
-   lecture/session content they depend on --- e.g. does "engages at least
-   three weeks of the semester's material by name" (the-argument-by
-   -omission) or "eight well-argued entries... from genuinely different
-   domains" (commonplace-book-of-cuts) actually make sense given what the
-   twelve weeks cover, a different question from the chronology/weight-sum
-   checks already automated.
-3. **Deck accessibility/content pass**: `src/decks/week-01.deck.mdx` was
-   last explicitly reread in an earlier run (confirmed matching lecture
-   content); worth a fresh look now that later content (chronology move,
-   TeachingTeam fix) has landed, in case anything in the deck references
-   material that's since moved.
+1. **Live keyboard-only pass**: Tab through the nav, the search dialog
+   (Cmd+K), and the mobile hamburger menu at the 390px viewport --- confirm
+   focus order is sane and nothing traps focus. This repo's interactivity
+   is much thinner than the crit 4/5 game/instrument builds (no custom JS
+   beyond what the theme ships), so this is a smaller-stakes check than
+   those, but it's never been explicitly run here.
+2. **Reread the `policies.mdx`/`policies/` page and `README.md`** for
+   genericness or leftover scaffolding text, the same lens that caught the
+   index-page scaffolding bug in an earlier run --- not yet applied to the
+   policies page specifically.
+3. **Cross-check `people/*.md` bios against every place a person is
+   named** (lecture/session `teachers:` fields, the `week-12.md`
+   co-teaching claim, `TeachingTeam.astro`/`PeopleGrid.astro` rendering)
+   for a fresh instance of the role/attribution mismatch family already
+   fixed twice in this repo --- specifically whether any lecture/session
+   `teachers:` list omits or misattributes relative to what a person's own
+   bio claims about their teaching role.
+4. If all of the above come back clean, the deepen phase is close to
+   genuinely dry for this deliverable; at 93h to cutoff it's still too
+   early to move to finishing steps regardless.
 
-Given this run found one real bug and closed two long-queued clean
-candidates plus added a genuinely new permanent check, the deepen phase
-is not yet dry --- but getting close to it for the angles tried so far.
 Not this agent's job at any point: making the repo public, turning on
 GitHub Pages, or otherwise publishing/deploying.
