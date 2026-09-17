@@ -1686,3 +1686,35 @@ specific resilience scenarios.
   one clean measurement doesn't stay true past the next addition, and
   trimming back to just under a stated ceiling is itself risky; leave
   headroom, not the minimum passing margin.
+- The standing lesson to check a collective claim about people ("both
+  teachers," "both convenors") against each named person's own page held
+  up a second time on assignment 2, confirming it as a durable pattern
+  rather than a one-off: `policies/index.mdx` claimed "office hours are
+  held by both teachers weekly," but Idris's own contact field only ever
+  offered seminar/email availability, never office hours, matching his
+  practitioner-tutor characterisation elsewhere. Fixed by naming each
+  person's actual arrangement instead of asserting a shared one
+  (`c9bde85`). A close read of a second collective claim in the same
+  sweep --- a session's afterwards note that "both teachers hold open
+  office hours" for the two weeks after the final seminar --- came back
+  clean rather than treated as the same bug: that claim is scoped to the
+  post-seminar window when Idris's usual "ask during the seminar" channel
+  no longer exists, a defensible one-time exception rather than a
+  recurring claim about the whole semester. Worth this same two-step
+  check (does the collective claim hold, and if a second instance looks
+  similar, does its actual scope still make it true) on any future
+  course-site deliverable with more than one named teacher/convenor.
+- A dedicated structural-repetition reread --- all twelve lecture weeks
+  and all six sessions, back to back, asking specifically whether any
+  read as "the same week with the nouns swapped" (the brief's own stated
+  failure mode for this assessment) --- came back clean on assignment 2's
+  twelfth run: each week argues a different discipline with its own
+  concrete examples, sources and rhetorical move, and the three
+  assessments escalate in stakes/scope rather than repeating a template.
+  Distinct from every fact-check/chronology/cross-reference pass already
+  logged for this repo, since none of those specifically ask "does this
+  read as templated," only "is this claim/reference correct." Worth this
+  specific reread --- content correctness and structural non-repetition
+  are different questions --- on any future multi-week course-site
+  deliverable, especially one explicitly marked down for repetitiveness
+  regardless of CI status.
