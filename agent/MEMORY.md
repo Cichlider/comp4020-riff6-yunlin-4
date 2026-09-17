@@ -1626,3 +1626,63 @@ specific resilience scenarios.
   needed --- confirmed rather than assumed from that fact alone, per the
   standing "the code suggests X is safe" vs. "X is confirmed safe"
   discipline. Closes that entry's open question; no fix needed.
+- **A third dev-vs-built-preview divergence, this time on an Astro site:
+  `astro dev`'s injected `<astro-dev-toolbar>` intercepts keyboard tab
+  order**, distinct from both the Vite-HMR-forces-reload issue (crit 4,
+  live against `pnpm dev`) and the earlier View-Transitions timing false
+  alarms. Assignment 2's eleventh-run keyboard pass first ran against
+  `pnpm dev` and found `Tab` from the hamburger toggle landed on the dev
+  toolbar's shadow-root host element instead of the next real nav item ---
+  looked like a real focus-order bug until checked against `pnpm build &&
+  pnpm preview` instead, where the same tab sequence moved correctly
+  through skip-link -> brand -> hamburger -> search -> homepage cards, no
+  toolbar element anywhere in the tab order. General lesson, generalising
+  the standing "test lifecycle/interaction quirks against the built
+  preview server" practice already logged for the other starter template's
+  Vite HMR: on any Astro-based deliverable, run a live keyboard/focus-order
+  check against `pnpm preview`, not `pnpm dev`, since the dev toolbar is
+  itself a focusable, tab-order-visible element with no production
+  counterpart.
+- **A finding can close as "not actionable from this repo" rather than
+  either "clean" or "fixed," when the gap lives in vendored theme code
+  under `node_modules` rather than this repo's own tracked `src/`.**
+  Assignment 2's eleventh-run keyboard pass found the mobile hamburger
+  menu (`astro-theme-university`'s `Nav.astro`, installed as an npm
+  dependency, not part of this repo's own source) never closes on
+  `Escape` --- only a click on the toggle button flips `aria-expanded`
+  back to `false`; the component's script has no `keydown` listener at
+  all. Not a keyboard trap (tabbing continues past the still-open menu
+  into the rest of the page normally) and the site's own build-time axe
+  check still passes clean (Escape-to-close is an APG best-practice
+  recommendation, not a WCAG failure a11y tooling enforces), so it's a
+  real but minor platform-level rough edge rather than a bug in anything
+  this course repo actually owns --- the README is explicit that the
+  theme package "arrived" fixed, and a `node_modules` edit wouldn't
+  persist as this repo's own work regardless. Worth this same "is the gap
+  in this repo's tracked source, or in a vendored dependency I can't
+  meaningfully edit" question before spending effort on any future finding
+  that surfaces inside an installed theme/component package --- it's a
+  third, genuinely different outcome from the "closed clean" /
+  "closed, fixed a real bug" pair already logged throughout this file
+  (crit 5's `Target.discardTarget` absence is the nearest precedent, for a
+  CDP method rather than a vendored UI component).
+- **A brief-stated word ceiling can silently get re-crossed by a single
+  later, unrelated additive commit, even after it was already trimmed
+  back under the limit once.** Assignment 2's `PROCESS.md` was trimmed to
+  562 words at one run (`a67dd65`), then a later run's citation addition
+  (`17cfa89`, citing a second verification example) pushed it to 616 ---
+  over the brief's 600-word ceiling again --- with nothing in
+  `check:evidence` (which only validates citation resolution, never word
+  count) catching it. Found only by rerunning the standing `perl -pe
+  's/\(https?:\/\/[^)]*\)//g' PROCESS.md | wc -w` measurement again on a
+  routine deepen pass, not triggered by anything specific to that commit.
+  Re-trimmed to 583, leaving real margin this time rather than landing
+  exactly at 600 (the first trim pass landed at exactly 600, which is too
+  close to trust against any counting-method ambiguity --- rewrote a
+  second pass down to 583). General lesson, sharpening the existing "an
+  editing session that only ever adds is exactly when a ceiling silently
+  gets crossed" entry in this file: the word-count check needs rerunning
+  after *every* `PROCESS.md` edit that adds text, not just periodically ---
+  one clean measurement doesn't stay true past the next addition, and
+  trimming back to just under a stated ceiling is itself risky; leave
+  headroom, not the minimum passing margin.
