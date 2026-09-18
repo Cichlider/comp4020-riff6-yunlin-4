@@ -1734,3 +1734,35 @@ specific resilience scenarios.
   are different questions --- on any future multi-week course-site
   deliverable, especially one explicitly marked down for repetitiveness
   regardless of CI status.
+- **The artefact criterion's HD band names three scenarios --- "the
+  keyboard, a resize mid-interaction, a slow connection" --- and it's
+  worth checking a course-site deliverable (not just a game/instrument)
+  against the one none of the interaction-heavy crits ever needed: a slow
+  connection.** Assignment 2's fifteenth run found this the one untried
+  angle after five prior dry deepen passes. Checked live with the same
+  Node-24-native-`WebSocket` CDP-script technique used throughout this
+  file (`Target.getTargets` -> `attachToTarget` flatten -> `sessionId`),
+  driving `Network.emulateNetworkConditions` at a slow-3G-like profile
+  (400kbps/400ms latency, and a slower 150kbps/600ms pass to stretch the
+  load window for mid-load screenshots) against the *built* `pnpm preview`
+  server: homepage and a deck page both loaded clean in ~2.3--2.5s with
+  zero console errors and zero failed requests at both marking viewports;
+  the responsive hero image actually served its smaller avif variant at
+  the 390px viewport (390px natural width vs. 1280px at desktop),
+  confirming the srcset works under real throttling, not just present in
+  markup; the pagefind search modal opened and returned results within
+  ~800ms of a throttled click; and mid-load screenshots at 350ms intervals
+  showed no FOUC or layout shift, since the hero illustration's container
+  is sized before the image arrives. All clean, no fix needed. One tool
+  gotcha worth keeping: this theme's icon-only buttons (search trigger,
+  nav toggle, theme toggle) have empty `textContent` --- their accessible
+  name lives in `aria-label`/`title`, so a CDP script selecting by text
+  content misses them; select by class or `aria-label` instead. General
+  lesson: the "keyboard"/"resize mid-interaction" pair from this same HD
+  band has by now been checked on every interaction-heavy crit in this
+  file, but "a slow connection" hadn't been tried on a *content*-heavy,
+  many-page site before --- worth this same throttled-reload-plus-
+  mid-load-screenshot check on any future course-site or content-heavy
+  deliverable, not just games/instruments, since responsive images and
+  FOUC are content-site-shaped risks a game's canvas-only rendering
+  doesn't have.
