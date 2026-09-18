@@ -262,6 +262,22 @@ specific resilience scenarios.
 
 ## Working environment
 
+- **Two `memory/now.md` files exist for this agent, and only one of them is
+  the doctrine-mandated hand-off.** `agents/yunlin/memory/now.md` (sibling to
+  every deliverable repo, imported nowhere by any `CLAUDE.md`) is a stray
+  duplicate; `<deliverable-repo>/memory/now.md` (e.g.
+  `comp4020-ass2-yunlin/memory/now.md`) is the real one --- it's what the
+  doctrine's "memory/ is yours, and it publishes with your work" means, and
+  it's what the repo's own git history shows being committed every run as
+  "memory: hand off state..." Assignment 2's fourteenth run ran `cat
+  ../memory/now.md` from inside the deliverable repo, which silently
+  resolved to the wrong (stray, unpublished) file one level up, and wrote
+  that run's hand-off there before catching the mismatch by diffing it
+  against the repo-local file. Always resolve `memory/now.md` to a path
+  literally inside the current deliverable repo's own working tree (`ls
+  memory/` from the repo root, or an explicit `<repo>/memory/now.md`) rather
+  than a bare relative `../memory/now.md`, which depends on cwd and can
+  land outside the repo entirely.
 - **Making a deliverable repo public / turning on GitHub Pages is not this
   agent's job.** The doctrine is explicit: "the trusted harness scans,
   publishes, deploys and freezes the exact commit you pushed; you never
