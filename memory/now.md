@@ -1,61 +1,56 @@
 # now
 
-Thirteenth run, deepen phase (69h to cutoff at start of this run). No new
-bugs found --- closed all three items the twelfth run's hand-off queued,
-plus one bonus check, all clean. Working tree unchanged (no content edits
-this run), `pnpm check` and `pnpm check:evidence` both green.
+Fourteenth run, deepen phase (63h to cutoff at start of this run). Closed
+both items the thirteenth run's hand-off queued, both clean. Working tree
+unchanged (no content edits this run), `pnpm check` and `pnpm check:evidence`
+both green.
 
 ## What this run did
 
-1. **`PROCESS.md` word count re-verified**: 583 words (link URLs stripped),
-   unchanged since the last trim, still inside the brief's 400--600 ceiling.
-2. **SLOP course-code digit checked**: `SLOP3268` is consistent everywhere
-   it appears (`course-config.ts`, the week-01 deck, README) and the brief
-   itself says the level digit doesn't affect grading --- confirmed fine,
-   no action needed, low-value item now closed for good.
-3. **Live pagefind search re-checked post-edit** (built `pnpm preview`,
-   `agent-browser`, base path `/comp4020-ass2-yunlin/`): searched "office
-   hours" and got four relevant, correctly-highlighted results including
-   the twelfth run's fixed policies text ("Marisol holds office hours
-   weekly; Idris is reachable..."); clicked through to the Policies page,
-   correct URL, no console errors.
-4. **Bonus check, not previously queued**: reread `painting-and-silence.md`
-   and `week-04.md` frontmatter directly to confirm the ninth-run
-   chronology fix (moving the session to week 4, `2027-03-17`) is still
-   internally consistent (`week: 4` on both, session date after both
-   related lecture dates), then loaded `/sessions/` live and confirmed the
-   rendered list is in correct chronological order (weeks 1, 4, 5, 7, 9,
-   12) with no leftover ordering artefact from the move.
-5. Noted `llms.txt` is regenerated fresh on every `pnpm check`/build (not
-   hand-maintained), so it can't go stale between content edits the way a
-   committed artefact could --- spot-checked the painting-and-silence entry
-   matches current content anyway, but this isn't a standing check that
-   needs repeating; it's structurally covered by the build itself.
+1. **Mobile-viewport (390x844) visual pass on Policies and
+   painting-and-silence** (built `pnpm preview` on port 4855, `agent-browser
+   --args "--no-sandbox"`, the standing `set viewport` + reopen sequence):
+   scrolled both pages top to bottom. Policies' recently-fixed office-hours
+   paragraph reads clean and legible; painting-and-silence's title, dated
+   seminar plan, and Teaching team/Related sections all render correctly at
+   the mobile width, including the correctly-singular "Convenor" role label
+   from the earlier TeachingTeam fix. One thing double-checked and ruled a
+   non-issue: the session's subtitle line-wrapped right after its `---`,
+   which looked like a missing space in the screenshot --- checked the raw
+   frontmatter (`src/content/sessions/painting-and-silence.md`) and the
+   space is there; it's just where the line happened to break at 390px.
+2. **Site-wide `og:title`/`description`/`og:description` reread**, this
+   time by extracting all three from every one of the 31 built pages in
+   `dist/` (via `grep -oP` per file, not eyeballing minified HTML) rather
+   than trusting a prior partial spot-check: every page's copy is specific
+   to its own content, nothing generic or reused verbatim across pages, no
+   how-to-play-style leak. Last swept sixth run; several content edits
+   since (office-hours, role-label, session-date-move fixes) all differ
+   correctly in their respective pages' meta tags now too.
+
+Both were the two remaining genuinely-untried angles the thirteenth run's
+hand-off named. Both closed clean.
 
 ## Next run
 
-The deepen list is now dry for a third time running, across three separate
-runs (11th, 12th, 13th) that each closed their predecessor's queued items
-clean with nothing new surfacing except the one office-hours bug on the
-12th. At 69h to cutoff this is still well outside the ~24--40h band prior
-crits actually wound down at, so continue rather than move to finishing
-steps.
+This makes four consecutive dry deepen passes (11th, 12th, 13th, 14th)
+since the last real bug (12th run, office-hours). Per the standing
+"don't manufacture a fifth angle once genuinely new questions run out"
+lesson in MEMORY.md, and per the crit 1/5 precedent (finish once a fresh
+angle turns up nothing, don't wait out the hours-to-cutoff number as a
+literal gate): at 63h to cutoff there's still real margin before the
+24--40h band prior crits actually wound down at, so this is not yet a
+finishing-steps run. But the standard checklist and the two follow-up
+angles are both now exhausted --- the next run needs either:
 
-If a future run finds the standard checklist still dry, genuinely untried
-angles left:
-
-1. A mobile-viewport (390px) visual screenshot pass specifically on the
-   pages touched by recent edits (Policies, the painting-and-silence
-   session) --- no visual/legibility check has been done on those two pages
-   since their content changed, only structural/search checks.
-2. Reread `og:title`/`og:description` meta tags site-wide one more time ---
-   last swept clean on the sixth run, several content edits ago (the
-   office-hours fix, the role-label fix, the session date move).
-3. If both of those come back clean too, that's four consecutive dry
-   passes; at that point the right move is likely to wait for hours-to-
-   cutoff to close toward the 24--40h band rather than manufacture a fifth
-   angle, per the standing "don't invent busywork once genuinely new
-   questions run out" lesson in MEMORY.md.
+1. A genuinely new question of the codebase/content (not a re-verify of
+   anything already logged clean in MEMORY.md), same spirit as the
+   "ask a different question" pivots logged there for other deliverables, or
+2. If nothing new surfaces on a good-faith attempt at (1), it's reasonable
+   to let the run be a light one (rerun `pnpm check`/`check:evidence`, spot
+   confirm nothing regressed) and let hours-to-cutoff close toward the
+   band where finishing steps make sense, rather than inventing more
+   angles just to fill the run.
 
 Not this agent's job at any point: making the repo public, turning on
 GitHub Pages, or otherwise publishing/deploying.
