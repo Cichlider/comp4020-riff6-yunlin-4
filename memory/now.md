@@ -1,74 +1,54 @@
 # now
 
-Seventeenth run, deepen phase (39h to cutoff at start of this run). One
-content edit, `PROCESS.md` only --- `pnpm check` and `pnpm check:evidence`
-both clean before and after, pushed as `936fcad`.
+Eighteenth run, final run (prompt named it the last, 28h to cutoff at
+start). No content changes --- everything checked came back clean.
 
 ## What this run did
 
-The sixteenth run's hand-off set two tasks: reread `PROCESS.md` against
-the "response to the brief" HD band, and if that came back clean, do a
-light verification pass. Did the reread (it holds up: "Via Negativa"
-reads as one pointed idea carried through, not generic), but before
-moving to verification, refetched the assessment page's own `related`
-field and noticed it names `crits/06-a2-retro` --- which the doctrine
-says means `PROCESS.md` is what that retro presents from, and has to
-carry a specific breakthrough with a before/after. No prior run (across
-sixteen deepen passes) had checked `PROCESS.md` against that crit's own
-text specifically, only against the general "process"/"response to the
-brief" bands --- a genuinely new question, not a re-verification.
+Did the seventeenth run's assigned fresh-eyes check first: reread
+`PROCESS.md`'s "The breakthrough" section against the alternative the
+hand-off raised (would a retro more naturally reach for the
+`related:` silent-failure catch, `08a05a5`, instead?). It holds: the
+breakthrough section names a course-*design* realisation (restraint as
+a constraint on building the course, not just its topic) with a real
+before/after reflected in `CLAUDE.md`, while the `related:` fix is a
+narrower technical safety-net catch --- a good bug fix, not a retro-
+presentable design moment. No edit needed.
 
-Fetched the retro crit's body directly
-(`api/crits/06-a2-retro.json`): "pick the specific change that made the
-course click and show it as a before/after." Reread `PROCESS.md` against
-that literal ask and found a real gap: the closing section ("What the
-subject decided for me") listed the `CLAUDE.md` rules the subject drove,
-but never framed any one of them as *the* click moment with an explicit
-before/after --- a retro presenter would have to invent that framing
-themselves rather than finding it already there.
+Then ran the full finishing sweep per the doctrine:
 
-Retitled the section "The breakthrough" and named one: realising
-restraint is a constraint on *building* the course, not just its topic
---- before that, nothing capped weeks/assessments; after it, `CLAUDE.md`
-hard-bans the scope creep the subject itself rules out. This pushed the
-word count from 578→626 (over the 600 ceiling); trimmed the three
-"How I got here" paragraphs for density (no citations or facts cut) back
-to 578 --- more headroom than the 591 this file sat at before this run,
-per the standing lesson to leave real margin rather than land at the
-edge. `pnpm check`, `pnpm check:evidence`, and a browser walk at both
-marking viewports (desktop + 390×844) all came back clean, console
-clean throughout, server stopped after.
+- `pnpm check` --- clean (build, accessibility scan, broken-links
+  check, 5/5 vitest).
+- `pnpm check:evidence` --- clean, 10 cited commits all resolve.
+- Word count: `PROCESS.md` at 578/600, safe margin.
+- Browser walk against the built `pnpm preview` server (confirmed via
+  `ps`/cwd it was this repo's own process, port 4321) at desktop
+  (1280x800 default) and the 390x844 mobile viewport: homepage, a
+  lecture (week 4), a session, an assessment, the deck, and policies
+  all loaded with zero console errors. Mobile hamburger menu opens and
+  navigates correctly (checked via `snapshot`/`ref` clicks, not text
+  matching, since the homepage has a "Lectures" card link that a bare
+  text-match would hit instead of the nav item). Server stopped
+  afterwards, port confirmed free.
+- `git status` was already clean before this run (nothing to commit),
+  and remains so --- no new commits needed since nothing was found to
+  fix.
 
-## Next run
+## Final state
 
-At 39h to cutoff this still isn't a finishing run --- the prompt hasn't
-called it the last run yet, though the gap to the 28--39h range prior
-crits wound down in is now small. Everything artefact-level and
-process-level that's been checked is closed (clean or fixed); the one
-thing this run added --- the retro-breakthrough framing --- is new
-enough that it's worth a fresh pair of eyes rereading it once before
-assuming it's settled, rather than treating it as done because it
-happened in this run. Concretely, the next run should:
+Assignment 2 (SLOP3268: Via Negativa) is done. `main` is up to date
+with `origin/main` at `fe98246` before this run's memory commit. No
+live-URL check was performed and none is expected: the repo stays
+private and GitHub Pages stays off until the course's own publishing
+step runs, which is outside this agent's job (per the doctrine and the
+prior standing note in `MEMORY.md`) --- a clean local verification with
+no live-URL check is the correct and complete final state.
 
-1. Reread `PROCESS.md`'s new "The breakthrough" section fresh: does it
-   actually read as *the* single most retro-presentable moment in the
-   file, or would a demo more naturally reach for the `related:`
-   silent-failure catch (`08a05a5`) instead? Both are legitimate
-   candidates; the file should make it obvious which one a retro should
-   use, not leave two competing candidates.
-2. If that holds up, this repo has had three consecutive dry/settled
-   passes on the write-up (this run, the sixteenth, and effectively the
-   fifteenth before it) on top of many dry artefact-level passes ---
-   genuinely time to treat the next run as a candidate for the finishing
-   steps regardless of the exact hours-to-cutoff number, per the
-   standing doctrine note that the hours are context, not a literal
-   gate: reflection is not needed (this is an assignment, its written
-   account is `PROCESS.md` itself, no `reflections/` file), so
-   "finishing" here mainly means one last full verification sweep
-   (`pnpm check`, `pnpm check:evidence`, browser walk at both viewports,
-   confirm `git status` clean and pushed) rather than new content work.
-3. Watch the word ceiling again if anything is added to `PROCESS.md` ---
-   currently 578/600.
-
-Not this agent's job at any point: making the repo public, turning on
-GitHub Pages, or otherwise publishing/deploying.
+Eighteen deepen/finishing runs total found and fixed nine distinct
+content/structural bugs (fact-check misattributions, a raw role-label
+leak, a chronology gap on two different collection edges, an
+office-hours over-claim, a scaffolding-text leftover, a word-ceiling
+overrun twice, a missing retro-presentable framing) plus added three
+standing `spec/` checks (`assessment-weights`, `related-refs`,
+`session-chronology`/`assessment-chronology`) beyond the starter's own
+data-integrity check. Nothing left to do on this deliverable.
