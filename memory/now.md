@@ -1,75 +1,67 @@
 # now
 
-Fifteenth run, deepen phase (52h to cutoff at start of this run). No content
-edits --- found a genuinely new angle, ran it, came back clean. Working tree
-unchanged, `pnpm check` and `pnpm check:evidence` both green (rechecked at
-the start of this run).
+Sixteenth run, deepen phase (45h to cutoff at start of this run). One
+content edit, `PROCESS.md` only --- `pnpm check` and `pnpm check:evidence`
+both clean before and after, pushed as `2c6a709`.
 
 ## What this run did
 
-Reread the course source's assessment page (`/topics/assessment/`) fresh
-rather than trusting memory of it --- specifically the artefact criterion's
-HD band: "holds up under use it wasn't designed for: the keyboard, a resize
-mid-interaction, a slow connection." Keyboard and resize-mid-interaction
-have both been checked for this repo across prior runs; **a slow
-connection** had not (that specific check has only ever been logged in
-MEMORY.md for assignment 1's gerrymandering game, never for this course
-site). Ran it live:
+The fifteenth run's hand-off named two options once the artefact-level
+browser/CDP checks read exhausted: try a truly new question against the
+human-read bands ("response to the brief," "process"), or do a light
+verification pass. Took the first option, since the "process" band is
+45% --- the heaviest single criterion --- and hadn't been reread against
+the brief's own specific ask since it was first drafted.
 
-- Built (`pnpm build`), served with `pnpm preview` (port 4890, confirmed via
-  `ss -ltnp` per the standing port-collision footgun), opened with
-  `agent-browser --args "--no-sandbox"`.
-- Wrote three throwaway CDP scripts (Node 24 native `WebSocket`, same
-  `Target.getTargets` -> `attachToTarget` (flatten) -> `sessionId` pattern
-  MEMORY.md already documents for other checks) driving
-  `Network.emulateNetworkConditions` at a slow-3G-like profile (400kbps,
-  400ms latency; a second pass at 150kbps/600ms to stretch the load window
-  for mid-load screenshots).
-- Homepage reload under throttle: load event at ~2.5s, zero console errors,
-  zero failed requests, all four images (`complete: true`) including the
-  responsive `hero-home` avif variant (1280px natural width at desktop
-  viewport, 390px at the mobile marking viewport --- confirms responsive
-  image srcset is actually serving the smaller variant on slow mobile, not
-  just present in markup).
-- Search modal under throttle: clicking `.at-search-trigger` (an icon-only
-  button --- its accessible name is an `aria-label`/`title`, not text
-  content, which is why an early script draft's `textContent`-matching
-  selector missed it; worth remembering for any future check against this
-  theme's icon buttons) opened the pagefind UI in ~400ms and returned
-  results for a real query in another ~380ms, no errors.
-- Deck page (`/decks/week-01/`, astromotion, 21 slides) under the same
-  throttle: load event at ~2.3s, no errors.
-- Mid-load screenshots at 350ms intervals during the slower (150kbps)
-  homepage load: no FOUC, no layout shift --- the hero illustration's
-  container is already correctly sized before the image itself arrives (a
-  gradient placeholder fills the same box), so the image fading in doesn't
-  move any surrounding text. Text and nav are fully styled from the first
-  screenshot onward.
+Refetched the assessment page's full band descriptors and reread
+`PROCESS.md` against them. Found a real gap: the brief explicitly wants
+the narrative to "center on decisions about what makes a good course,
+which of those became encoded rules (in CLAUDE.md or spec/ checks), and
+which were deliberately omitted" --- but every paragraph in `PROCESS.md`
+was about technical/content verification (spec/ checks catching schema
+gaps, the fact-check pass), never about which course-design beliefs
+became `CLAUDE.md` rules or what was deliberately left out. Replaced the
+stale "Before you ship" paragraph (a checkpoint note that added nothing
+to the process narrative) with a new closing paragraph naming that: the
+`CLAUDE.md` content rules (argue-the-thesis, no filler weeks, no
+scope-creep fourth-assessment/thirteenth-week) are the subject's own
+course-design logic written down as rules, `assessment-weights.test.ts`
+encodes the same instinct as a check, and visual restyling was left out
+deliberately since over-decorating a course about leaving things out
+would be the wrong gesture.
 
-All closed clean --- a genuine check discharged (the artefact criterion
-names this scenario explicitly and nothing in this repo's history had
-tried it), not a manufactured pass. No fix needed.
+This pushed the word count from 583 to 700 (my first draft of the new
+paragraph was too long); trimmed across the file --- tightened three
+earlier paragraphs' prose without cutting any citation or content ---
+back to 591, comfortably under the 600 ceiling with real margin (not
+landing at the exact edge, per the standing lesson in MEMORY.md about
+one prior run landing at exactly 600). `pnpm check:evidence` confirms
+all 10 cited commits still resolve.
 
 ## Next run
 
-Five consecutive dry passes now (11th–15th), covering: reread-everything
-content sweeps, mobile visual passes, meta-tag rereads, and now the
-rubric's named "slow connection" scenario. At 52h to cutoff there's still
-real margin before the 24--40h band prior crits actually wound down at
-(crit 1 at 28h, crit 5 at 39h), so this is not yet a finishing-steps run,
-but the standing angles are now genuinely exhausted. The next run needs
-either:
+At 45h to cutoff this still isn't a finishing run (prior crits wound
+down at 28--39h out) — the prompt hasn't called this the last run. The
+standing artefact-level browser/CDP angles (keyboard, resize, slow
+connection, forced-colors, bfcache, freeze/thaw, and the whole event-
+wiring family) are all closed clean per the deep history in MEMORY.md,
+and this run just closed the one open human-read-band angle. The next
+run should:
 
-1. A truly new question not yet asked of this repo (the "response to the
-   brief" HD band --- "pointed, surprising, one idea carried all the way"
-   --- and the "process" HD band --- "judgement visible in what was thrown
-   away" --- are both read by a human, not checkable live the way the
-   artefact band's scenarios are; if a fresh reread of `PROCESS.md` against
-   those two bands surfaces a real gap, fix it there rather than inventing
-   another browser check), or
-2. If a good-faith attempt at (1) turns up nothing, a light run (rerun
-   `pnpm check`/`check:evidence`, spot-confirm nothing regressed) is fine
-   --- don't manufacture a sixth browser-check angle just to fill the run.
+1. Reread `PROCESS.md` fresh one more time against both remaining
+   human-read bands ("response to the brief" HD: "a pointed, surprising
+   answer ... one idea, carried all the way") --- check whether "What I
+   built" still reads as pointed/surprising rather than generic, now
+   that a course-design paragraph has been added elsewhere in the file.
+2. If that comes back clean too, this repo has now had two consecutive
+   dry passes on the write-up itself (on top of five dry artefact-level
+   passes before it) --- a light verification run (`pnpm check`,
+   `pnpm check:evidence`, a quick browser sanity check at both marking
+   viewports) is appropriate rather than manufacturing a seventh
+   browser-check angle or an eighth PROCESS.md reread.
+3. Watch the 400--600 word ceiling on `PROCESS.md` again if any future
+   run adds a citation or sentence to it --- currently 591, with less
+   headroom than the 583 this file sat at before this run.
 
 Not this agent's job at any point: making the repo public, turning on
 GitHub Pages, or otherwise publishing/deploying.
