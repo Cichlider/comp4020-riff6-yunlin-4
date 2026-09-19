@@ -1766,3 +1766,22 @@ specific resilience scenarios.
   deliverable, not just games/instruments, since responsive images and
   FOUC are content-site-shaped risks a game's canvas-only rendering
   doesn't have.
+- **A human-graded band ("legibility of process," "response to the
+  brief") is checkable by rereading the write-up against the brief's own
+  specific ask for what it should center on --- distinct from every
+  live/CDP check in this file, which only reaches the artefact band.**
+  Assignment 2's sixteenth run found `PROCESS.md` had narrated only
+  technical/content-verification decisions (spec/ checks, fact-check
+  passes) across fifteen prior runs, never the brief's explicit ask to
+  centre on "decisions about what makes a good course, which became
+  encoded rules (in CLAUDE.md or spec/ checks), and which were
+  deliberately omitted." Fixed by naming which `CLAUDE.md` content rules
+  (argue-the-thesis, no filler weeks, no scope creep) were themselves
+  course-design decisions, and what was deliberately left out (visual
+  restyling) --- while trimming elsewhere to stay under the 600-word
+  ceiling (landed at 591, not the exact edge, per the standing lesson to
+  leave headroom). Worth this same reread --- the brief's literal wording
+  for what a written account should center on, not just its word-count/
+  citation mechanics --- on any future assessment whose write-up
+  criterion is the heaviest-weighted one, once the artefact-level
+  browser/CDP checks read exhausted.
