@@ -1,67 +1,74 @@
 # now
 
-Sixteenth run, deepen phase (45h to cutoff at start of this run). One
+Seventeenth run, deepen phase (39h to cutoff at start of this run). One
 content edit, `PROCESS.md` only --- `pnpm check` and `pnpm check:evidence`
-both clean before and after, pushed as `2c6a709`.
+both clean before and after, pushed as `936fcad`.
 
 ## What this run did
 
-The fifteenth run's hand-off named two options once the artefact-level
-browser/CDP checks read exhausted: try a truly new question against the
-human-read bands ("response to the brief," "process"), or do a light
-verification pass. Took the first option, since the "process" band is
-45% --- the heaviest single criterion --- and hadn't been reread against
-the brief's own specific ask since it was first drafted.
+The sixteenth run's hand-off set two tasks: reread `PROCESS.md` against
+the "response to the brief" HD band, and if that came back clean, do a
+light verification pass. Did the reread (it holds up: "Via Negativa"
+reads as one pointed idea carried through, not generic), but before
+moving to verification, refetched the assessment page's own `related`
+field and noticed it names `crits/06-a2-retro` --- which the doctrine
+says means `PROCESS.md` is what that retro presents from, and has to
+carry a specific breakthrough with a before/after. No prior run (across
+sixteen deepen passes) had checked `PROCESS.md` against that crit's own
+text specifically, only against the general "process"/"response to the
+brief" bands --- a genuinely new question, not a re-verification.
 
-Refetched the assessment page's full band descriptors and reread
-`PROCESS.md` against them. Found a real gap: the brief explicitly wants
-the narrative to "center on decisions about what makes a good course,
-which of those became encoded rules (in CLAUDE.md or spec/ checks), and
-which were deliberately omitted" --- but every paragraph in `PROCESS.md`
-was about technical/content verification (spec/ checks catching schema
-gaps, the fact-check pass), never about which course-design beliefs
-became `CLAUDE.md` rules or what was deliberately left out. Replaced the
-stale "Before you ship" paragraph (a checkpoint note that added nothing
-to the process narrative) with a new closing paragraph naming that: the
-`CLAUDE.md` content rules (argue-the-thesis, no filler weeks, no
-scope-creep fourth-assessment/thirteenth-week) are the subject's own
-course-design logic written down as rules, `assessment-weights.test.ts`
-encodes the same instinct as a check, and visual restyling was left out
-deliberately since over-decorating a course about leaving things out
-would be the wrong gesture.
+Fetched the retro crit's body directly
+(`api/crits/06-a2-retro.json`): "pick the specific change that made the
+course click and show it as a before/after." Reread `PROCESS.md` against
+that literal ask and found a real gap: the closing section ("What the
+subject decided for me") listed the `CLAUDE.md` rules the subject drove,
+but never framed any one of them as *the* click moment with an explicit
+before/after --- a retro presenter would have to invent that framing
+themselves rather than finding it already there.
 
-This pushed the word count from 583 to 700 (my first draft of the new
-paragraph was too long); trimmed across the file --- tightened three
-earlier paragraphs' prose without cutting any citation or content ---
-back to 591, comfortably under the 600 ceiling with real margin (not
-landing at the exact edge, per the standing lesson in MEMORY.md about
-one prior run landing at exactly 600). `pnpm check:evidence` confirms
-all 10 cited commits still resolve.
+Retitled the section "The breakthrough" and named one: realising
+restraint is a constraint on *building* the course, not just its topic
+--- before that, nothing capped weeks/assessments; after it, `CLAUDE.md`
+hard-bans the scope creep the subject itself rules out. This pushed the
+word count from 578→626 (over the 600 ceiling); trimmed the three
+"How I got here" paragraphs for density (no citations or facts cut) back
+to 578 --- more headroom than the 591 this file sat at before this run,
+per the standing lesson to leave real margin rather than land at the
+edge. `pnpm check`, `pnpm check:evidence`, and a browser walk at both
+marking viewports (desktop + 390×844) all came back clean, console
+clean throughout, server stopped after.
 
 ## Next run
 
-At 45h to cutoff this still isn't a finishing run (prior crits wound
-down at 28--39h out) — the prompt hasn't called this the last run. The
-standing artefact-level browser/CDP angles (keyboard, resize, slow
-connection, forced-colors, bfcache, freeze/thaw, and the whole event-
-wiring family) are all closed clean per the deep history in MEMORY.md,
-and this run just closed the one open human-read-band angle. The next
-run should:
+At 39h to cutoff this still isn't a finishing run --- the prompt hasn't
+called it the last run yet, though the gap to the 28--39h range prior
+crits wound down in is now small. Everything artefact-level and
+process-level that's been checked is closed (clean or fixed); the one
+thing this run added --- the retro-breakthrough framing --- is new
+enough that it's worth a fresh pair of eyes rereading it once before
+assuming it's settled, rather than treating it as done because it
+happened in this run. Concretely, the next run should:
 
-1. Reread `PROCESS.md` fresh one more time against both remaining
-   human-read bands ("response to the brief" HD: "a pointed, surprising
-   answer ... one idea, carried all the way") --- check whether "What I
-   built" still reads as pointed/surprising rather than generic, now
-   that a course-design paragraph has been added elsewhere in the file.
-2. If that comes back clean too, this repo has now had two consecutive
-   dry passes on the write-up itself (on top of five dry artefact-level
-   passes before it) --- a light verification run (`pnpm check`,
-   `pnpm check:evidence`, a quick browser sanity check at both marking
-   viewports) is appropriate rather than manufacturing a seventh
-   browser-check angle or an eighth PROCESS.md reread.
-3. Watch the 400--600 word ceiling on `PROCESS.md` again if any future
-   run adds a citation or sentence to it --- currently 591, with less
-   headroom than the 583 this file sat at before this run.
+1. Reread `PROCESS.md`'s new "The breakthrough" section fresh: does it
+   actually read as *the* single most retro-presentable moment in the
+   file, or would a demo more naturally reach for the `related:`
+   silent-failure catch (`08a05a5`) instead? Both are legitimate
+   candidates; the file should make it obvious which one a retro should
+   use, not leave two competing candidates.
+2. If that holds up, this repo has had three consecutive dry/settled
+   passes on the write-up (this run, the sixteenth, and effectively the
+   fifteenth before it) on top of many dry artefact-level passes ---
+   genuinely time to treat the next run as a candidate for the finishing
+   steps regardless of the exact hours-to-cutoff number, per the
+   standing doctrine note that the hours are context, not a literal
+   gate: reflection is not needed (this is an assignment, its written
+   account is `PROCESS.md` itself, no `reflections/` file), so
+   "finishing" here mainly means one last full verification sweep
+   (`pnpm check`, `pnpm check:evidence`, browser walk at both viewports,
+   confirm `git status` clean and pushed) rather than new content work.
+3. Watch the word ceiling again if anything is added to `PROCESS.md` ---
+   currently 578/600.
 
 Not this agent's job at any point: making the repo public, turning on
 GitHub Pages, or otherwise publishing/deploying.
