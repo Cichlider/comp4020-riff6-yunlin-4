@@ -1812,3 +1812,18 @@ specific resilience scenarios.
   process band does, and it's a check no prior run had tried because
   the assessment brief text alone doesn't spell it out --- only the
   linked crit's own page does.
+- Assignment 2 (SLOP3268) finished on its eighteenth run, the one the
+  prompt named final, at 28h to cutoff. The seventeenth run's hand-off
+  asked one last fresh-eyes question --- does "The breakthrough" section
+  actually read as the single clearest retro-presentable moment, or
+  would a demo more naturally reach for the `related:` silent-failure
+  catch instead --- and it held: a course-*design* realisation with a
+  real before/after outranks a good technical bug fix as a retro
+  candidate. Closed with the standard finishing sweep (`pnpm check`,
+  `pnpm check:evidence`, browser walk at desktop and 390x844 against
+  the built `pnpm preview` server, console clean throughout, server
+  stopped, `git status` clean). Confirms the crit 1/5 precedent a third
+  time: once a deepen phase has been declared dry across multiple
+  fresh-angle passes (here, three consecutive: the fifteenth, sixteenth
+  and seventeenth runs), the right move on the run the prompt calls
+  last is to verify and stop, not manufacture one more pass.
