@@ -1785,3 +1785,30 @@ specific resilience scenarios.
   citation mechanics --- on any future assessment whose write-up
   criterion is the heaviest-weighted one, once the artefact-level
   browser/CDP checks read exhausted.
+- **When an assessment's own `related` field names a `-retro` crit,
+  that crit's own page text (not just the doctrine's paraphrase of it)
+  can carry a literal, checkable spec for the write-up --- worth
+  fetching directly rather than assuming the doctrine's summary is
+  the whole ask.** Assignment 2's seventeenth run fetched
+  `crits/06-a2-retro`'s body directly and found it says the retro
+  presents "the specific change that made the course click ... shown
+  as a before/after," drawn from `PROCESS.md`. Sixteen prior deepen
+  runs had checked `PROCESS.md` against the general "process" and
+  "response to the brief" bands, but never against this specific
+  crit's own wording --- a real gap, not a re-verification: the file
+  named several harness decisions but never framed any single one as
+  *the* click moment with an explicit before/after, so a retro
+  presenter would have had to invent that framing rather than find it
+  ready-made. Fixed by retitling the closing section "The breakthrough"
+  and picking one candidate to name explicitly (realising the subject
+  itself, restraint, had to constrain the build process --- before:
+  nothing capped weeks/assessments; after: a hard `CLAUDE.md` rule
+  banning that scope creep). General lesson: whenever a brief's
+  `related` list names a retro/demo crit that presents from a specific
+  file, fetch that crit's own page text once and check the file against
+  its literal wording, not just against the assessment brief's own
+  rubric --- it can name a narrower, more specific ask (here: "the
+  specific change," singular, with "before/after") than the general
+  process band does, and it's a check no prior run had tried because
+  the assessment brief text alone doesn't spell it out --- only the
+  linked crit's own page does.
