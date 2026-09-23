@@ -1,0 +1,316 @@
+---
+import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
+import { sessionLabels, siteConfig } from "../site-config";
+
+const apiBase = import.meta.env.BASE_URL;
+
+const typeLabels: Record<string, string> = {
+  sessions: sessionLabels.singular,
+  lectures: "Lecture",
+  assessments: "Assessment",
+  people: "Person",
+  policies: "Policy",
+};
+---
+
+<ContentLayout
+  title="Course Graph"
+  description="Every related: link this course declared, drawn as one shape instead of read one page at a time."
+  {...siteConfig}
+>
+  <p>
+    Every page on this site states its own connections one at a time --- a
+    lecture links its seminar, an assessment links the weeks it draws on.
+    Nothing shows the whole shape those links make together. This page reads
+    the same <code>related:</code> edges <code>spec/related-refs.test.ts</code>
+    already checks for dangling references, and draws all of them at once.
+  </p>
+  <p>
+    Drag a node to move it, click one to open that page. Node colour is
+    content type; an isolated node is one nothing links back to.
+  </p>
+
+  <div id="graph-legend" class="graph-legend"></div>
+  <div id="graph-status" class="graph-status">Loading the course graph&hellip;</div>
+  <svg
+    id="graph-svg"
+    class="graph-svg"
+    viewBox="0 0 900 600"
+    role="img"
+    aria-label="Force-directed graph of the course's related content"
+  >
+    <g id="graph-edges"></g>
+    <g id="graph-nodes"></g>
+  </svg>
+</ContentLayout>
+
+<style>
+  .graph-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--at-spacing-md);
+    margin-block-end: var(--at-spacing-md);
+    font-size: var(--at-font-size-sm);
+    color: var(--at-text-secondary);
+  }
+
+  .graph-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--at-spacing-xs);
+  }
+
+  .graph-legend .swatch {
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+    border-radius: 999px;
+    display: inline-block;
+  }
+
+  .graph-status {
+    font-size: var(--at-font-size-sm);
+    color: var(--at-text-secondary);
+    margin-block-end: var(--at-spacing-sm);
+  }
+
+  .graph-svg {
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 3 / 2;
+    background: var(--at-bg-alt);
+    border: 1px solid var(--at-border);
+    border-radius: var(--at-border-radius);
+    touch-action: none;
+  }
+
+  :global(.graph-node-circle) {
+    stroke: var(--at-bg);
+    stroke-width: 2;
+    cursor: pointer;
+  }
+
+  :global(.graph-node-label) {
+    font-family: var(--at-font-body);
+    font-size: 0.5rem;
+    fill: var(--at-text);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  :global(.graph-edge) {
+    stroke: var(--at-divider);
+    stroke-width: 1;
+  }
+</style>
+
+<script define:vars={{ apiBase, typeLabels }}>
+  const TYPE_COLOR = {
+    sessions: "var(--at-primary)",
+    lectures: "var(--at-secondary)",
+    assessments: "var(--at-tertiary)",
+    people: "var(--at-info)",
+    policies: "var(--at-text-secondary)",
+  };
+
+  const statusEl = document.getElementById("graph-status");
+  const legendEl = document.getElementById("graph-legend");
+  const svg = document.getElementById("graph-svg");
+  const edgesG = document.getElementById("graph-edges");
+  const nodesG = document.getElementById("graph-nodes");
+
+  const W = 900;
+  const H = 600;
+
+  fetch(`${apiBase}api/index.json`)
+    .then((res) => {
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      return res.json();
+    })
+    .then((data) => buildGraph(data))
+    .catch((err) => {
+      statusEl.textContent = `Couldn't load the course graph (${err.message}). It's generated at build time, so a local "astro dev" server won't have it --- try "pnpm build && pnpm preview".`;
+    });
+
+  function buildGraph(data) {
+    const nodes = data.nodes.map((n, i) => {
+      const angle = (i / data.nodes.length) * Math.PI * 2;
+      return {
+        id: n.id,
+        type: n.type,
+        title: n.title,
+        x: W / 2 + Math.cos(angle) * 150,
+        y: H / 2 + Math.sin(angle) * 150,
+        vx: 0,
+        vy: 0,
+      };
+    });
+    const byId = new Map(nodes.map((n) => [n.id, n]));
+
+    const seen = new Set();
+    const edges = [];
+    for (const e of data.edges) {
+      const key = [e.from, e.to].sort().join("|");
+      if (seen.has(key)) continue;
+      seen.add(key);
+      if (byId.has(e.from) && byId.has(e.to)) edges.push({ a: byId.get(e.from), b: byId.get(e.to) });
+    }
+
+    const incoming = new Set();
+    for (const e of data.edges) incoming.add(e.to);
+
+    statusEl.textContent = `${nodes.length} nodes, ${edges.length} declared connections.`;
+
+    const types = [...new Set(nodes.map((n) => n.type))];
+    legendEl.innerHTML = types
+      .map(
+        (t) =>
+          `<span><span class="swatch" style="background:${TYPE_COLOR[t] ?? "var(--at-text-secondary)"}"></span>${typeLabels[t] ?? t}</span>`,
+      )
+      .join("");
+
+    for (const edge of edges) {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("class", "graph-edge");
+      edgesG.appendChild(line);
+      edge.el = line;
+    }
+
+    for (const node of nodes) {
+      const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("class", "graph-node-circle");
+      circle.setAttribute("r", incoming.has(node.id) ? "9" : "6");
+      circle.setAttribute("fill", TYPE_COLOR[node.type] ?? "var(--at-text-secondary)");
+      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      label.setAttribute("class", "graph-node-label");
+      label.setAttribute("text-anchor", "middle");
+      label.setAttribute("dy", "-0.7rem");
+      label.textContent = node.title;
+      g.appendChild(circle);
+      g.appendChild(label);
+      nodesG.appendChild(g);
+      node.el = g;
+      node.circleEl = circle;
+
+      let dragging = false;
+      g.addEventListener("pointerdown", (ev) => {
+        dragging = true;
+        node.fx = node.x;
+        node.fy = node.y;
+        g.setPointerCapture(ev.pointerId);
+        wake();
+      });
+      g.addEventListener("pointermove", (ev) => {
+        if (!dragging) return;
+        const p = toSvgPoint(ev.clientX, ev.clientY);
+        node.fx = p.x;
+        node.fy = p.y;
+      });
+      const release = () => {
+        if (!dragging) return;
+        dragging = false;
+        delete node.fx;
+        delete node.fy;
+      };
+      g.addEventListener("pointerup", release);
+      g.addEventListener("pointercancel", release);
+      g.addEventListener("click", () => {
+        if (movedSinceDown) return;
+        // The policies page is a singleton copied into the API under
+        // "policies/index", but it lives at /policies/, not /policies/index/.
+        const path = node.type === "policies" ? "policies" : node.id;
+        window.location.href = `${apiBase}${path}/`;
+      });
+      let movedSinceDown = false;
+      g.addEventListener("pointerdown", () => (movedSinceDown = false));
+      g.addEventListener("pointermove", () => (movedSinceDown = true));
+    }
+
+    function toSvgPoint(clientX, clientY) {
+      const pt = svg.createSVGPoint();
+      pt.x = clientX;
+      pt.y = clientY;
+      return pt.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    let rafId = null;
+    // The layout settles rather than animating forever: below this combined
+    // speed it stops calling requestAnimationFrame, both so the graph holds
+    // still enough to click (a perpetually-moving element never reads as
+    // "stable" to pointer/automation code) and so the tab isn't rendering an
+    // invisible 60fps loop after the graph looks done.
+    function wake() {
+      if (rafId === null) rafId = requestAnimationFrame(tick);
+    }
+
+    function tick() {
+      rafId = null;
+      for (const a of nodes) {
+        let fx = 0;
+        let fy = 0;
+        for (const b of nodes) {
+          if (a === b) continue;
+          let dx = a.x - b.x;
+          let dy = a.y - b.y;
+          let distSq = dx * dx + dy * dy || 0.01;
+          const force = 2200 / distSq;
+          const dist = Math.sqrt(distSq);
+          fx += (dx / dist) * force;
+          fy += (dy / dist) * force;
+        }
+        fx += (W / 2 - a.x) * 0.01;
+        fy += (H / 2 - a.y) * 0.01;
+        a.vx = (a.vx + fx) * 0.85;
+        a.vy = (a.vy + fy) * 0.85;
+      }
+      for (const edge of edges) {
+        const dx = edge.b.x - edge.a.x;
+        const dy = edge.b.y - edge.a.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 0.01;
+        const stretch = (dist - 90) * 0.02;
+        const ux = dx / dist;
+        const uy = dy / dist;
+        edge.a.vx += ux * stretch;
+        edge.a.vy += uy * stretch;
+        edge.b.vx -= ux * stretch;
+        edge.b.vy -= uy * stretch;
+      }
+      for (const n of nodes) {
+        if (n.fx !== undefined) {
+          n.x = n.fx;
+          n.y = n.fy;
+          n.vx = 0;
+          n.vy = 0;
+        } else {
+          n.x += n.vx;
+          n.y += n.vy;
+        }
+        n.x = Math.max(15, Math.min(W - 15, n.x));
+        n.y = Math.max(15, Math.min(H - 15, n.y));
+      }
+      render();
+
+      let speed = 0;
+      let anyPinned = false;
+      for (const n of nodes) {
+        speed += Math.abs(n.vx) + Math.abs(n.vy);
+        if (n.fx !== undefined) anyPinned = true;
+      }
+      if (speed > 0.05 || anyPinned) wake();
+    }
+
+    function render() {
+      for (const edge of edges) {
+        edge.el.setAttribute("x1", edge.a.x);
+        edge.el.setAttribute("y1", edge.a.y);
+        edge.el.setAttribute("x2", edge.b.x);
+        edge.el.setAttribute("y2", edge.b.y);
+      }
+      for (const n of nodes) {
+        n.el.setAttribute("transform", `translate(${n.x}, ${n.y})`);
+      }
+    }
+
+    wake();
+  }
+</script>
